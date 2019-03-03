@@ -11,7 +11,7 @@ const providers = [
   '@stitchng/adonis-extensions/providers/RequestExtensionProvider',
   '@stitchng/adonis-extensions/providers/ResponseExtensionProvider',
   '@stitchng/adonis-extensions/providers/ViewExtensionProvider',
-  '@stitchng/adonis-extensions/providers/ValidationExtensionProvider'
+  //'@stitchng/adonis-extensions/providers/ValidationExtensionProvider'
 ]
 ```
 
