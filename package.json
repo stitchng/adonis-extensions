@@ -7,20 +7,19 @@
     "src",
     "config",
     "providers",
-    "instructions.js"
-    "index.js"
+    "instructions.js",
+    "instructions.md"
   ],
   "directories":{
     "test":"test"
   },
   "scripts": {
-    "test": "node test/provider.spec.js"
+    "test": ""
   },
   "keywords": [
-    "paystack",
-    "payments",
-    "API",
-    "adonisjs"
+    "extension",
+    "adonisjs",
+    "adonis-framework"
   ],
   "author": "StitchNG <stitchnig@gmail.com> (https://twitter.com/stitchappn)",
   "license": "MIT",
@@ -34,7 +33,7 @@
     "semver":"^5.5.0",
     "@adonisjs/sink":"^1.0.6",
     "@adonisjs/fold": "^4.0.9"
-},
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/stitchng/adonis-extensions.git"
