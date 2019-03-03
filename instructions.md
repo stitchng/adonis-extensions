@@ -10,6 +10,7 @@ There are 3 separate providers: You'll have to add each of them to the _provider
 const providers = [
   '@stitchng/adonis-extensions/providers/RequestExtensionProvider',
   '@stitchng/adonis-extensions/providers/ResponseExtensionProvider',
+  '@stitchng/adonis-extensions/providers/ViewExtensionProvider',
   '@stitchng/adonis-extensions/providers/ValidationExtensionProvider'
 ]
 ```
