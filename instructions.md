@@ -2,7 +2,7 @@
 
 Like any other provider, you need to register the provider inside `start/app.js` file.
 
-There are 3 separate providers: You'll have to add each of them to the _providers_ array depending on you needs
+There are 4 separate providers: You'll have to add each of them to the _providers_ array depending on you needs
 
 >NOTE: The **validation** provider should only be included when the `@adonisjs/validator` package is installed
 
