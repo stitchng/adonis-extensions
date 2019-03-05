@@ -11,7 +11,7 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 
 ```bash
 
-  $ npm i --save @stitchng/adonis-extensions
+  $ adonis install adonisjs-extensions
 
 ```
 
@@ -29,14 +29,16 @@ MIT
 
 ```bash
 
+    npm run lint
+    
     npm run test
 
 ```
 
 ## Credits
 
-- Ifeora Okechukwu <Head Of Technology - Oparand> (https://twitter.com/isocroft)
-- Ahmad Aziz <Head - NodeJS Foundation> (https://instagram.com/dev_amaz)
+- [Ifeora Okechukwu <Head Of Technology - Oparand>](https://twitter.com/isocroft)
+- [Ahmad Aziz <Head - NodeJS Foundation>](https://instagram.com/dev_amaz)
     
 ## Contributing
 
