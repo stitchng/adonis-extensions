@@ -7,7 +7,16 @@ class RouteExtensionProvider extends ServiceProvider {
     const InvalidArgumentException = require('@adonisjs/generic-exceptions').InvalidArgumentException
     const params = ctx.params || {}
 
-    matchers = JSON.parse(unescape(matchers))
+    const _unescape = function(str){
+
+        return str.replace(/\%(?:[A-F0-9]{2})/g, (hex) => {
+            hex = hex.substr(1)
+
+            return String.fromCharCode(parseInt(hex, 16))
+        })
+    }
+
+    matchers = JSON.parse(_unescape(matchers))
 
     for (var paramKey in matchers) {
       if (matchers.hasOwnProperty(paramKey)) {
@@ -40,12 +49,38 @@ class RouteExtensionProvider extends ServiceProvider {
 	 * @return {void}
 	 */
   register () {
+    
+  }
+
+  /**
+	 * Attach context getter when all providers have
+	 * been registered
+	 *
+	 * @method boot
+	 *
+	 * @return {void}
+	 */
+  boot () {
     const Route = this.app.use('Route')
     const Server = this.app.use('Server')
 
     /*const escapeRegExp = function (string) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
     }*/
+
+    const _escape = function(str){
+
+        return str.replace(/./g, (char, index) => {
+            let result = char
+
+            if(('@*_+-./'.indexOf(char) === -1)
+                && (/^(?:[a-zA-Z0-9])$/.exec(char) === null)){
+                result = `%${char.charCodeAt(0).toString(16).toUpperCase()}`
+            }
+
+            return result;
+        })
+    }
 
     Server.registerNamed({ paramsMatch: this.paramsMatchMiddleware })
 
@@ -58,26 +93,14 @@ class RouteExtensionProvider extends ServiceProvider {
             break;
           }
 
-          let regexp_str = matcher.toString().replace(/\//g, '')
-          matchers[param] = regexp_str
+          let regexpStr = matcher.toString().replace(/\//g, '')
+          matchers[param] = regexpStr
         }
       }
 
-      this.middleware(`paramsMatch:${escape(JSON.stringify(matchers))}`)
+      this.middleware(`paramsMatch:${_escape(JSON.stringify(matchers))}`)
       return this
     })
-  }
-
-  /**
-	 * Attach context getter when all providers have
-	 * been registered
-	 *
-	 * @method boot
-	 *
-	 * @return {void}
-	 */
-  boot () {
-
   }
 }
 
