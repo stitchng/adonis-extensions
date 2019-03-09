@@ -4,57 +4,55 @@ const { ServiceProvider } = require('@adonisjs/fold')
 const url = require('url')
 
 class RequestExtensionProvider extends ServiceProvider {
+  /**
+     * Register namespaces to the IoC container
+     *
+     * @method register
+     *
+     * @return {void}
+     */
+  register () {
+    // ....
+  }
 
   /**
-	 * Register namespaces to the IoC container
-	 *
-	 * @method register
-	 *
-	 * @return {void}
-	 */
-	register() {
-		//....
-	}
+     * Attach context getter when all providers have
+     * been registered
+     *
+     * @method boot
+     *
+     * @return {void}
+     */
+  boot () {
+    const Request = this.app.use('Adonis/Src/Request')
+    const RouteManager = this.app.use('Adonis/Src/Route')
 
-	/**
-	 * Attach context getter when all providers have
-	 * been registered
-	 *
-	 * @method boot
-	 *
-	 * @return {void}
-	 */
-	boot() {
+    Request.getter('currentTime', function () {
+      return new Date().getTime()
+    })
 
-		const Request = this.app.use('Adonis/Src/Request')
-    		const RouteManager = this.app.use('Adonis/Src/Route')
+    Request.macro('hasJsonBody', function () {
+      return (this.is(['json', 'html']) === 'json')
+    })
 
-	    	Request.getter('currentTime', function () {
-	      		return new Date().getTime()
-	    	})
+    Request.macro('expectsJsonBody', function () {
+      return (this.accepts(['html', 'json']) === 'json')
+    })
 
-	    	Request.macro('hasJsonBody', function() {
-	      		return (this.is(['json', 'html']) === 'json')
-	    	})
+    Request.macro('currentRoute', function () {
+      let urlParts = url.parse(this.url(), true)
+      let route = RouteManager.match(urlParts.pathname, this.method().toUpperCase(), urlParts.host)
 
-	    	Request.macro('expectsJsonBody', function() {
-	      		return (this.accepts(['html', 'json']) === 'json')
-	    	})
+      return route !== null ? route.route.toJSON() : { name: '', route: null, verbs: [], middleware: [], handler: null, domain: null }
+    })
 
-		Request.macro('currentRoute', function () {
-			let url_parts = url.parse(this.url(), true)
-			let route = RouteManager.match(url_parts.pathname, this.method().toUpperCase(), url_parts.host)
+    Request.macro('userAgent', function () {
+      return this.header('User-Agent')
+    })
 
-			return route !== null ? route.route.toJSON() : { name: "", route: null, verbs: [], middleware: [], handler: null, domain: null }
-		})
-
-		Request.macro('userAgent', function () {
-			return this.header('User-Agent')
-		})
-
-		Request.macro('hasHeader', function (headerText) {
-			return (typeof this.header(headerText) === 'string')
-		})
+    Request.macro('hasHeader', function (headerText) {
+      return (typeof this.header(headerText) === 'string')
+    })
   }
 }
 

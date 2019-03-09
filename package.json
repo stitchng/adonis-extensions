@@ -3,35 +3,53 @@
   "version": "0.0.1",
   "description": "An addon/plugin package to provide core extensions for AdonisJS 4.0+",
   "main": "index.js",
-  "files":[
+  "files": [
     "src",
     "config",
     "providers",
     "instructions.js",
     "instructions.md"
   ],
-  "directories":{
-    "test":"test"
+  "directories": {
+    "test": "test"
   },
   "scripts": {
-    "test": ""
+    "lint": "standard",
+    "pretest": "npm run lint",
+    "test": "nyc node japaFile.js",
+    "test:win": "node ./node_modules/japa-cli/index.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "extension",
+    "adonis-addon",
     "adonisjs",
     "adonis-framework"
   ],
   "author": "StitchNG <stitchnig@gmail.com> (https://twitter.com/stitchappn)",
   "license": "MIT",
+  "nyc": {
+    "exclude": [
+      "test"
+    ]
+  },
+  "standard": {
+    "globals": [
+      "use",
+      "test"
+    ]
+  },
   "dependencies": {
-    "@adonisjs/generic-exceptions":"^2.0.1",
-    "debug":"^3.1.2"
+    "@adonisjs/generic-exceptions": "^2.0.1",
+    "debug": "^3.1.2"
   },
   "devDependencies": {
-    "japa": "^2.0.6",
-    "japa-cli":"^2.0.0",
-    "semver":"^5.5.0",
-    "@adonisjs/sink":"^1.0.6",
+    "japa": "^2.0.5",
+    "japa-cli": "^1.0.1",
+    "nyc": "^13.0.1",
+    "semver": "^5.5.0",
+    "standard": "^12.0.1",
+    "@adonisjs/sink": "^1.0.6",
     "@adonisjs/fold": "^4.0.9"
   },
   "repository": {
