@@ -2,15 +2,16 @@
 
 Like any other provider, you need to register the provider inside `start/app.js` file.
 
-There are 4 separate providers: You'll have to add each of them to the _providers_ array depending on you needs
+There are 5 separate providers: You'll have to add each of them to the _providers_ array depending on you needs
 
 >NOTE: The **validation** provider should only be included when the `@adonisjs/validator` package is installed
 
 ```js
 const providers = [
-  '@stitchng/adonis-extensions/providers/RequestExtensionProvider',
-  '@stitchng/adonis-extensions/providers/ResponseExtensionProvider',
-  '@stitchng/adonis-extensions/providers/ViewExtensionProvider',
+  'adonisjs-extensions/providers/RequestExtensionProvider',
+  'adonisjs-extensions/providers/ResponseExtensionProvider',
+  'adonisjs-extensions/providers/ViewExtensionProvider',
+  'adonisjs-extensions/providers/RouteExtensionProvider',
   //'@stitchng/adonis-extensions/providers/ValidationExtensionProvider'
 ]
 ```
