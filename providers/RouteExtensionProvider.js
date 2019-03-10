@@ -85,17 +85,24 @@ class RouteExtensionProvider extends ServiceProvider {
     Server.registerNamed({ paramsMatch: this.paramsMatchMiddleware })
 
     Route.Route.macro('paramsMatch', function (matchers = {}) {
+      let errorMsg = null
+
       for (var param in matchers) {
         if (matchers.hasOwnProperty(param)) {
           let matcher = matchers[param]
 
           if (!(matcher instanceof RegExp)) { // new RegExp()
+            errorMsg = `"${param}" route parameter doesn't have a valid matcher`
             break;
           }
 
           let regexpStr = matcher.toString().replace(/\//g, '')
           matchers[param] = regexpStr
         }
+      }
+
+      if(error !== null){
+          throw new TypeError(errorMsg)
       }
 
       this.middleware(`paramsMatch:${_escape(JSON.stringify(matchers))}`)
