@@ -11,9 +11,6 @@ sudo: false
 install:
   - npm install
   
-before_script:
-  - npm run lint
-  
 notifications:
   email:
     - stitchnig@gmail.com

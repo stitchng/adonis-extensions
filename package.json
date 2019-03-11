@@ -1,5 +1,5 @@
 {
-  "name": "@stitchng/adonis-extensions",
+  "name": "adonisjs-extensions",
   "version": "0.0.1",
   "description": "An addon/plugin package to provide core extensions for AdonisJS 4.0+",
   "main": "index.js",
