@@ -42,6 +42,8 @@ MIT
     
 ## Contributing
 
+See the [CONTRIBUTING.md](https://github.com/stitchng/adonis-extensions/blob/master/CONTRIBUTING.md) file for info
+
 [npm-image]: https://img.shields.io/npm/v/adonisjs-extensions.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/adonisjs-extensions
 
