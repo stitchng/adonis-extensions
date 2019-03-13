@@ -3,7 +3,8 @@
 const { ServiceProvider } = require('@adonisjs/fold')
 
 class ValidationExtensionProvider extends ServiceProvider {
-  /**
+
+	/**
 		 * Register namespaces to the IoC container
 		 *
 		 * @method register
@@ -11,7 +12,8 @@ class ValidationExtensionProvider extends ServiceProvider {
 		 * @return {void}
 		 */
   register () {
-    // ....
+
+    
   }
 
   /**
@@ -23,6 +25,37 @@ class ValidationExtensionProvider extends ServiceProvider {
 		 * @return {void}
 		 */
   boot () {
+
+		const Validator = this.app.use('Adonis/Addons/Validator')
+
+		const digitValidator = async (data, field, message, args, get) => {
+			const fieldValue = get(data, field)
+			if (!fieldValue) {
+				return true
+			}
+
+			if (!/^\d+/i.test(fieldValue)) {
+				throw message
+			}
+		}
+	
+		const minValueValidator = async (data, field, message, args, get) => {
+			const fieldValue = get(data, field)
+			if (parseInt(fieldValue) < parseInt(args[0])) {
+				throw message
+			}
+		}
+	
+		const maxValueValidator = async (data, field, message, args, get) => {
+			const fieldValue = get(data, field)
+			if (parseInt(fieldValue) > parseInt(args[0])) {
+				throw message
+			}
+		}
+
+		Validator.extend('digitString', digitStringValidator)
+		Validator.extend('maxValue', minValueValidator)
+		Validator.extend('maxValue', maxValueValidator)
 
   }
 }
