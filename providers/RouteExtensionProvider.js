@@ -22,6 +22,7 @@ class RouteExtensionProvider extends ServiceProvider {
       if (matchers.hasOwnProperty(paramKey)) {
         let paramValue = null
         let paramRegexStr = null
+        let errorMsg = `@@adonisjs/Extensions: route parameter/macther missing`
 
         paramValue = params[paramKey] || null
         paramRegexStr = matchers[paramKey] || null
@@ -31,9 +32,10 @@ class RouteExtensionProvider extends ServiceProvider {
           if ((RegExp(paramRegexStr)).test(paramValue)) {
             continue
           }
-        } else {
-          throw InvalidArgumentException.invoke(`route parameter OR route macther missing`)
+          errorMsg = `@@adonisjs/Extensions: route parameter doesn't macth`
         }
+        
+        throw InvalidArgumentException.invoke(errorMsg)
       }
     }
 
@@ -92,7 +94,7 @@ class RouteExtensionProvider extends ServiceProvider {
           let matcher = matchers[param]
 
           if (!(matcher instanceof RegExp)) { // new RegExp()
-            errorMsg = `"${param}" route parameter doesn't have a valid matcher`
+            errorMsg = `@@adonisjs/Extensions: "${param}" route parameter doesn't have a valid matcher`
             break;
           }
 
@@ -101,7 +103,7 @@ class RouteExtensionProvider extends ServiceProvider {
         }
       }
 
-      if(error !== null){
+      if(errorMsg !== null){
           throw new TypeError(errorMsg)
       }
 
