@@ -30,16 +30,31 @@ class ViewExtensionProvider extends ServiceProvider {
 
     View.global('toImage', function (source, attributes = {}) {
       let assetsUrl = this.resolve('assetsUrl')
-      let { longdesc, name, id, alt } = attributes
+      let { longdesc, name, id, alt, className } = attributes
     
-      return this.safe(`<img src="${assetsUrl(source)}" ` + (id?`id="${id}" `:'') + (alt?`alt="${alt}" `:'') + (name?`name="${name}" `:'') + (longdesc?`longdesc="${longdesc}" `:'') + ' \/>')
+      return this.safe(`<img src="${assetsUrl(source)}"` + (className?` class="${className}"`:'') + (id?` id="${id}"`:'') + (alt?` alt="${alt}"`:'') + (name?` name="${name}"`:'') + (longdesc?` longdesc="${longdesc}"`:'') + ' \/>')
     })
     
     View.global('toFrame', function(source, attributes = {}){
       let assetsUrl = this.resolve('assetsUrl')
-      let { frameborder, scrolling, name, id } = attributes
+      let { frameborder, tabIndex, allowtransparency, sandbox, scrolling, name, id, className } = attributes
     
-      return this.safe(`<iframe src="${assetsUrl(source)}" ` + (id?`id="${id}" `:'') + (scrolling?`scrolling="${scrolling}" `:'') + (name?`name="${name}" `:'') + (frameborder?`frameborder="${frameborder}" `:'') + '><\/frame>')
+      return this.safe(`<iframe src="${assetsUrl(source)}"` + (tabIndex?` tabindex="${tabIndex}"`:'') + (className?` class="${className}"`:'') + (id?` id="${id}"`:'') + (scrolling?` scrolling="${scrolling}"`:'') + (name?` name="${name}"`:'') + (sandbox?` sandbox="${sandbox}"`:'') + (allowtransparency?` allowtransparency="${allowtransparency}"`:'') + (frameborder?` frameborder="${frameborder}"`:'') + '><\/frame>')
+    })
+
+    View.global('toComboBox', function(attributes = {}, options = []) {
+      let { name, className, id } = attributes
+      return this.safe(`<select${id?` id="${id}"`:''}${className?` class="${className}"`:''}${name?` name="${name}"`:''}>${options.map(option => `<option value="${option.value}"${option.selected?` selected="selected"`:''}>${option.text}<\/option>`)}<\/select>`)
+    })
+
+    View.global('toTextBox', function(attributes = { autocomplete:"off" }, defaultValue = "") {
+      let { minLength, placeholder, autoComplete, className, name, id, type, tabIndex, value } = attributes
+      return this.safe(`<input${id?` id="${id}"`:''}${className?` class="${className}"`:''}${name?` name="${name}"`:''}${type?` type="${type}"`:''}${placeholder?` placeholder="${placeholder}"`:''}${minLength?` minlength="${minLength}"`:''}${defaultValue?` value="${defaultValue}"`:''}${tabIndex?` tabindex="${tabIndex}"`:''}${autoComplete?` autocomplete="${autoComplete}"`:''} \/>`)
+    })
+
+    View.global('toMultiTextBox', function(attributes = {}, defaultValue = "") {
+      let { minLength, cols, rows, placeholder, className, name, id, tabIndex } = attributes
+      return this.safe(`<textarea${id?` id="${id}"`:''}${cols?` cols="${cols}"`:''}${rows?` rows="${rows}"`:''}${className?` class="${className}"`:''}${name?` name="${name}"`:''}${type?` type="${type}"`:''}${placeholder?` placeholder="${placeholder}"`:''}${minLength?` minlength="${minLength}"`:''}${tabIndex?` tabindex="${tabIndex}"`:''}>${defaultValue?`${defaultValue}`:''}<textarea\/>`)
     })
     
     View.global('preRender', function (source, routeParams = {}) {
