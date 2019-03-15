@@ -59,7 +59,8 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
         return true
       })
       .then(() => {
-        assert.deepEqual(engine.locals, { full_year: 2019, origin: 'http://127.0.0.1:8080' })
+        assert.equal(engine.resolve('full_year'), 2019)
+        assert.equal(engine.resolve('origin'), 'http://127.0.0.1:8080')
       })
   })
 })
