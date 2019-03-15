@@ -35,11 +35,18 @@ class ResponseExtensionProvider extends ServiceProvider {
     })
 
     Response.macro('setHeaders', function (headers = {}) {
+      
+      if(!(headers instanceof Object)){
+        return false
+      }
+      
       for (let header in headers) {
         if (headers.hasOwnProperty(header)) {
           this.safeHeader(header, headers[header])
         }
       }
+
+      return true
     })
 
     Response.macro('isEmpty', function () {

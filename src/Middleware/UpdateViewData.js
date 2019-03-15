@@ -3,8 +3,11 @@
 class UpdateViewData {
   async handle ({ request, view }, next) {
     if (typeof view.share === 'function') {
+      let port = request.port()
+      
       view.share({
-        origin: `${request.protocol()}://${request.hostname()}`
+        full_year: `${(new Date).getFullYear()}`,
+        origin: `${request.protocol()}://${request.hostname()}${port?':'+port:''}`
       })
     }
 

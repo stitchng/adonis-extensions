@@ -11,7 +11,10 @@ class ViewExtensionProvider extends ServiceProvider {
 	 * @return {void}
 	 */
   register () {
-    // ....
+    
+    this.app.bind('Adonis/Middleware/UpdateViewData', (app) => {
+
+    })
   }
 
   /**

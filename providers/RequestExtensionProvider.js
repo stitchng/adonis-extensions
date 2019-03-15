@@ -46,6 +46,16 @@ class RequestExtensionProvider extends ServiceProvider {
       return route !== null ? route.route.toJSON() : { name: '', route: null, verbs: [], middleware: [], handler: null, domain: null }
     })
 
+    Request.macro('port', function () {
+      let isSSL = (this.request.socket.encrypted ? true : false);
+
+      if(isSSL){
+        return '443'
+      }
+
+      return this.request.socket.localPort || this.request.socket.remotePort;
+    })
+
     Request.macro('userAgent', function () {
       return this.header('User-Agent')
     })
