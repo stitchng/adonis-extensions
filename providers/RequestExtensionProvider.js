@@ -4,31 +4,31 @@ const { ServiceProvider } = require('@adonisjs/fold')
 const url = require('url')
 
 class RequestExtensionProvider extends ServiceProvider {
-  /**
-     * Register namespaces to the IoC container
-     *
-     * @method register
-     *
-     * @return {void}
-     */
+/**
+ * Register namespaces to the IoC container
+ *
+ * @method register
+ *
+ * @return {void}
+ */
   register () {
     // ....
   }
 
   /**
-     * Attach context getter when all providers have
-     * been registered
-     *
-     * @method boot
-     *
-     * @return {void}
-     */
+ * Attach context getter when all providers have
+ * been registered
+ *
+ * @method boot
+ *
+ * @return {void}
+ */
   boot () {
     const Request = this.app.use('Adonis/Src/Request')
     const RouteManager = this.app.use('Adonis/Src/Route')
 
     Request.getter('currentTime', function () {
-      return new Date().getTime()
+      return Date.now()
     })
 
     Request.macro('hasJsonBody', function () {
@@ -47,13 +47,13 @@ class RequestExtensionProvider extends ServiceProvider {
     })
 
     Request.macro('port', function () {
-      let isSSL = (this.request.socket.encrypted ? true : false);
+      let isSSL = (!!this.request.socket.encrypted)
 
-      if(isSSL){
+      if (isSSL) {
         return '443'
       }
 
-      return this.request.socket.localPort || this.request.socket.remotePort;
+      return this.request.socket.localPort || this.request.socket.remotePort
     })
 
     Request.macro('userAgent', function () {

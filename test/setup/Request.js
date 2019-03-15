@@ -3,36 +3,35 @@
 const Macroable = require('./Macroable')
 
 class Request extends Macroable {
+  constructor (headers = {}) {
+    super()
+    this.request = { headers, socket: { localPort: null, remotePort: '8080', encrypted: false } }
+  }
 
-	constructor(headers = {}){
-		this.request = { headers, socket: { localPort: null, remotePort: '8080', encrypted: false } }
-	}
+  static getter (propertyName, propertyGetter) {
+    Object.defineProperty(this.prototype, propertyName, {
+      enumerable: false,
+      configurable: true,
+      get: propertyGetter,
+      set: function () {}
+    })
+  }
 
-	static getter(propertyName, propertyGetter){
-        Object.defineProperty(this.prototype, propertyName, {
-            enumerable:false,
-            configurable:true,
-            get:propertyGetter,
-            set:function(){}
-        })
-	}
+  accepts (options) {
+    return !options
+  }
 
-	accepts(options){
-		return !options
-	}
-	
-	is(options){
-		return !!options
-	}
+  is (options) {
+    return !!options
+  }
 
-	protocol(){
-		return 'http'
-	}
+  protocol () {
+    return 'http'
+  }
 
-	hostname(){
-		return '127.0.0.1'
-	}
-	
+  hostname () {
+    return '127.0.0.1'
+  }
 }
 
 module.exports = Request

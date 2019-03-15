@@ -3,32 +3,32 @@
 const Macroable = require('./Macroable')
 
 class Response extends Macroable {
- 
-    constructor(statusCode = 0, data = null){
-        this.response = { statusCode, data }
-        this.headersSent = false
+  constructor (statusCode = 0, data = null) {
+    super()
+    this.response = { statusCode, data }
+    this.headersSent = false
+  }
+
+  status (code) {
+    this.response.statusCode = code
+    return this
+  }
+
+  json (data) {
+    if (!data) {
+      return false
     }
 
-    status(code){
-        this.response.statusCode = code
-        return this
+    if (this.response.data === null) {
+      this.response.data = JSON.stringify(data)
     }
 
-    json(data){
-        if(!data){
-            return false
-        }
+    return true
+  }
 
-        if(this.response.data === null){
-            this.response.data = JSON.stringify(data)
-        }
-
-        return true
-    }
-
-    safeHeader(headers){
-        return true
-    }
+  safeHeader (headers) {
+    return true
+  }
 }
 
 module.exports = Response

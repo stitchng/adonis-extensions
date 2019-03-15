@@ -7,13 +7,14 @@ class RouteExtensionProvider extends ServiceProvider {
     const InvalidArgumentException = require('@adonisjs/generic-exceptions').InvalidArgumentException
     const params = ctx.params || {}
 
-    const _unescape = function(str){
+    const _unescape = function (str) {
+      /* eslint-disable no-useless-escape */
+      return str.replace(/\%(?:[A-F0-9]{2})/g, (hex) => {
+        hex = hex.substr(1)
 
-        return str.replace(/\%(?:[A-F0-9]{2})/g, (hex) => {
-            hex = hex.substr(1)
-
-            return String.fromCharCode(parseInt(hex, 16))
-        })
+        return String.fromCharCode(parseInt(hex, 16))
+      })
+      /* eslint-enable no-useless-escape */
     }
 
     matchers = JSON.parse(_unescape(matchers))
@@ -34,7 +35,7 @@ class RouteExtensionProvider extends ServiceProvider {
           }
           errorMsg = `@@adonisjs/Extensions: route parameter doesn't macth`
         }
-        
+
         throw InvalidArgumentException.invoke(errorMsg)
       }
     }
@@ -44,44 +45,43 @@ class RouteExtensionProvider extends ServiceProvider {
   }
 
   /**
-	 * Register namespaces to the IoC container
-	 *
-	 * @method register
-	 *
-	 * @return {void}
-	 */
+ * Register namespaces to the IoC container
+ *
+ * @method register
+ *
+ * @return {void}
+ */
   register () {
-    
+
   }
 
   /**
-	 * Attach context getter when all providers have
-	 * been registered
-	 *
-	 * @method boot
-	 *
-	 * @return {void}
-	 */
+ * Attach context getter when all providers have
+ * been registered
+ *
+ * @method boot
+ *
+ * @return {void}
+ */
   boot () {
     const Route = this.app.use('Route')
     const Server = this.app.use('Server')
 
-    /*const escapeRegExp = function (string) {
+    /* const escapeRegExp = function (string) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
-    }*/
+    } */
 
-    const _escape = function(str){
+    const _escape = function (str) {
+      return str.replace(/./g, (char, index) => {
+        let result = char
 
-        return str.replace(/./g, (char, index) => {
-            let result = char
+        if (('@*_+-./'.indexOf(char) === -1) &&
+                (/^(?:[a-zA-Z0-9])$/.exec(char) === null)) {
+          result = `%${char.charCodeAt(0).toString(16).toUpperCase()}`
+        }
 
-            if(('@*_+-./'.indexOf(char) === -1)
-                && (/^(?:[a-zA-Z0-9])$/.exec(char) === null)){
-                result = `%${char.charCodeAt(0).toString(16).toUpperCase()}`
-            }
-
-            return result;
-        })
+        return result
+      })
     }
 
     Server.registerNamed({ paramsMatch: this.paramsMatchMiddleware })
@@ -95,7 +95,7 @@ class RouteExtensionProvider extends ServiceProvider {
 
           if (!(matcher instanceof RegExp)) { // new RegExp()
             errorMsg = `@@adonisjs/Extensions: "${param}" route parameter doesn't have a valid matcher`
-            break;
+            break
           }
 
           let regexpStr = matcher.toString().replace(/\//g, '')
@@ -103,8 +103,8 @@ class RouteExtensionProvider extends ServiceProvider {
         }
       }
 
-      if(errorMsg !== null){
-          throw new TypeError(errorMsg)
+      if (errorMsg !== null) {
+        throw new TypeError(errorMsg)
       }
 
       this.middleware(`paramsMatch:${_escape(JSON.stringify(matchers))}`)

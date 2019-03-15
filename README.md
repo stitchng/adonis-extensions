@@ -15,6 +15,76 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 
 ```
 
+## Usage
+
+>Using custom context routines for _.edge_ files in **resources/views**
+
+```html
+
+ <div class="variety">
+ {{ toImage('images/category-one.jpg', { alt: 'ahoy everyone' }) }} <!-- <img src="/images/category-one.jpg" alt="ahoy everyone"> -->
+
+ {{ toBigTextBox({ name:'tagline', className:'form-box' }, 'Just Say Hi!') }} <!-- <textarea class="form-box" name="tagline">Just Say Hi!</textarea> -->
+
+ - {{ toTextBox({ type:'text', name:'description', placeholder:'Enter Text...', className:'border form-input' }, 'Always opened') }} <!-- <input class="border form-input" name="description" type="text" placeholder="Enter Text..." value="Always opened"> -->
+
+ - {{ toComboBox({ name:'greetings' }, [{text:'Hello',value:'hello'}, {text:'World',value:'world',selected:true}]) }} <!-- <select name="greeting"><option value="hello">Hello</option>
+<option value="world" selected="selected">World</option></select> -->
+
+ - {{ toFrame('https://www.example.com', { scrolling:'no' }) }}  <!-- <iframe src="https://www.example.com" scrolling="no"></iframe> -->
+ </div>
+
+```
+
+>Using a _paramsMatch()_ custom method in routes for **start/routes.js**
+
+```js
+
+'use strict'
+
+/** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
+const Route = use('Route')
+
+ Route.get('/stats/:category', 'AnalyticsController.getData').as('analytics.stats').paramsMatch({category:/^([a-f0-9]{19})$/})
+
+```
+
+>Use custom methods on the **request** and **response** object(s) of the **HttpContext** object in middlewares/controllers files
+
+```js
+
+'use strict'
+
+const { start, stop } =  require('microjob')
+
+class NodeThreadsManager {
+
+    async handle({ request, response, view }, next){
+	    let started = false
+
+        let port = request.port()
+        let origin = `${request.protocol()}://${request.hostname()}${port?':'+port:''}`
+        
+        if(request.currentRoute().name.indexOf('usethread') > -1){
+		    await start()
+		    started = true
+	    }else{
+            response.setHeaders(                    {'X-Context-Status':'1'}
+            )
+        }
+
+        await next()
+
+	    if(started === true){
+		    await stop()
+	    }
+    }
+}
+
+module.exports = NodeThreadsManager
+
+```
+
 ## License
 
 MIT

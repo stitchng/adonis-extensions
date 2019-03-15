@@ -10,15 +10,15 @@
 */
 
 const test = require('japa')
-//const { Config } = require('@adonisjs/sink')
+// const { Config } = require('@adonisjs/sink')
 const { ioc } = require('@adonisjs/fold')
 const ViewExtensionProvider = require('../providers/ViewExtensionProvider.js')
 
 test.group('AdonisJS [View] Extensions Provider Test(s)', (group) => {
   group.before(() => {
     ioc.singleton('Adonis/Src/View', () => {
-        let View = require('./setup/View.js')
-        return new View
+      let View = require('./setup/View.js')
+      return new View()
     })
   })
 
@@ -35,6 +35,5 @@ test.group('AdonisJS [View] Extensions Provider Test(s)', (group) => {
     assert.isFunction(engine.resolve('toTextBox'))
     assert.isFunction(engine.resolve('toBigTextBox'))
     assert.isFunction(engine.resolve('dnsPrefetch'))
-    
   })
 })

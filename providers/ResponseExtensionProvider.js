@@ -3,25 +3,25 @@
 const { ServiceProvider } = require('@adonisjs/fold')
 
 class ResponseExtensionProvider extends ServiceProvider {
-  /**
-	 * Register namespaces to the IoC container
-	 *
-	 * @method register
-	 *
-	 * @return {void}
-	 */
+/**
+ * Register namespaces to the IoC container
+ *
+ * @method register
+ *
+ * @return {void}
+ */
   register () {
     // ....
   }
 
   /**
-	 * Attach context getter when all providers have
-	 * been registered
-	 *
-	 * @method boot
-	 *
-	 * @return {void}
-	 */
+ * Attach context getter when all providers have
+ * been registered
+ *
+ * @method boot
+ *
+ * @return {void}
+ */
   boot () {
     const Response = this.app.use('Adonis/Src/Response')
 
@@ -35,11 +35,10 @@ class ResponseExtensionProvider extends ServiceProvider {
     })
 
     Response.macro('setHeaders', function (headers = {}) {
-      
-      if(!(headers instanceof Object)){
+      if (!(headers instanceof Object)) {
         return false
       }
-      
+
       for (let header in headers) {
         if (headers.hasOwnProperty(header)) {
           this.safeHeader(header, headers[header])
@@ -50,6 +49,7 @@ class ResponseExtensionProvider extends ServiceProvider {
     })
 
     Response.macro('isEmpty', function () {
+      let result = false
       switch (this.response.statusCode) {
         case 304: // Not Modified [HTTP]
         case 204: // No Content [HTTP]
@@ -57,13 +57,14 @@ class ResponseExtensionProvider extends ServiceProvider {
         case 302: // Perm Redirect [HTTP]
         case 303: // See-Other Redirect [HTTP]
         case 100: // Continue [HTTP]
-          return true
+          result = true
           break
 
         default:
           return false
-          break
       }
+
+      return result
     })
   }
 }

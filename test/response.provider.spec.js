@@ -10,15 +10,15 @@
 */
 
 const test = require('japa')
-//const { Config } = require('@adonisjs/sink')
+// const { Config } = require('@adonisjs/sink')
 const { ioc } = require('@adonisjs/fold')
 const ResponseExtensionProvider = require('../providers/ResponseExtensionProvider.js')
 
 test.group('AdonisJS [Response] Extensions Provider Test(s)', (group) => {
   group.before(() => {
     ioc.singleton('Adonis/Src/Response', () => {
-        let Response = require('./setup/Response.js')
-        return Response
+      let Response = require('./setup/Response.js')
+      return Response
     })
   })
 
@@ -33,7 +33,7 @@ test.group('AdonisJS [Response] Extensions Provider Test(s)', (group) => {
     assert.isFunction(response.setHeaders)
     assert.isFunction(response.validationFailed)
     assert.isNull(response.response.data)
-    
+
     response.validationFailed(['Error: E_INVALID_SESSION'])
 
     assert.isString(response.response.data)

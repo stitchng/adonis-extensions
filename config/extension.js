@@ -3,7 +3,7 @@
 module.exports = {
 /*
 |-----------------------------------------------------------------
-| Security Header
+| Extra Security Header
 |-----------------------------------------------------------------
 |
 |
@@ -12,13 +12,13 @@ module.exports = {
 |
 |
 */
-  securiyHeader: {
+  extraSecurityHeaders: {
     'Clear-Site-Data': '"cache", "cookies", "storage", "executionContexts"', // "*"
     'Referrer-Policy': 'origin-when-cross-origin',
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
   },
 
-/*
+  /*
 |-----------------------------------------------------------------
 | Minify HTML ?
 |-----------------------------------------------------------------
