@@ -30,6 +30,7 @@ test.group('AdonisJS [View] Extensions Provider Test(s)', (group) => {
     let engine = new View.Engine()
 
     assert.isFunction(engine.resolve('toImage'))
+    assert.isFunction(engine.resolve('favIcon'))
     assert.isFunction(engine.resolve('toFrame'))
     assert.isFunction(engine.resolve('toComboBox'))
     assert.isFunction(engine.resolve('toTextBox'))

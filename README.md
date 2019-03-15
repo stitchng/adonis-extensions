@@ -22,16 +22,19 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 ```html
 
  <div class="variety">
- {{ toImage('images/category-one.jpg', { alt: 'ahoy everyone' }) }} <!-- <img src="/images/category-one.jpg" alt="ahoy everyone"> -->
+ {{ toImage('images/category-one.jpg', { alt: 'ahoy everyone' }) }} <!-- <img src="http:127.0.0.1:3333/public/images/category-one.jpg" alt="ahoy everyone"> -->
 
  {{ toBigTextBox({ name:'tagline', className:'form-box' }, 'Just Say Hi!') }} <!-- <textarea class="form-box" name="tagline">Just Say Hi!</textarea> -->
 
- - {{ toTextBox({ type:'text', name:'description', placeholder:'Enter Text...', className:'border form-input' }, 'Always opened') }} <!-- <input class="border form-input" name="description" type="text" placeholder="Enter Text..." value="Always opened"> -->
+ {{ toTextBox({ type:'text', name:'description', placeholder:'Enter Text...', className:'border form-input' }, 'Always opened') }} <!-- <input class="border form-input" name="description" type="text" placeholder="Enter Text..." value="Always opened"> -->
 
- - {{ toComboBox({ name:'greetings' }, [{text:'Hello',value:'hello'}, {text:'World',value:'world',selected:true}]) }} <!-- <select name="greeting"><option value="hello">Hello</option>
+ {{ toComboBox({ name:'greetings' }, [{text:'Hello',value:'hello'}, {text:'World',value:'world',selected:true}]) }} <!-- <select name="greeting"><option value="hello">Hello</option>
 <option value="world" selected="selected">World</option></select> -->
 
- - {{ toFrame('https://www.example.com', { scrolling:'no' }) }}  <!-- <iframe src="https://www.example.com" scrolling="no"></iframe> -->
+ {{ toFrame('https://www.example.com', { scrolling:'no' }) }}  <!-- <iframe src="https://www.example.com" scrolling="no"></iframe> -->
+
+ {{ favIcon('images/favicon.ico') }} <!-- <link rel="shortcut icon" href="http://127.0.0.1:3333/public/images.favicon.ico" type="image/x-icon">  -->
+
  </div>
 
 ```
