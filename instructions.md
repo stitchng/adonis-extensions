@@ -16,6 +16,16 @@ const providers = [
 ]
 ```
 
+>Add Middleware to `start/kernel.js` file
+
+```js
+const globalMiddleware = [
+  'Adonis/Middleware/Session',
+  ...
+  'Adonis/Middleware/UpdateViewData'
+]
+```
+
 ## Config
 
 The configuration is saved inside `config/extension.js` file. Tweak it accordingly.
