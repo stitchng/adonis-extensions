@@ -32,3 +32,5 @@ View.Engine.prototype.resolve = function (resolvable = '') {
     return this.context[resolvable]
   }
 }
+
+module.exports = View
