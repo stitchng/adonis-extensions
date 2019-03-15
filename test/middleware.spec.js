@@ -32,7 +32,12 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
 
     ioc.singleton('Adonis/Src/View', () => {
       let View = require('./setup/View.js')
-      return new View()
+      return View
+    })
+
+    ioc.singleton('Adonis/Src/Route', () => {
+      let RouteManager = require('./setup/RouteManager.js')
+      return RouteManager
     })
 
     ioc.singleton('Adonis/Src/HttpContext', () => {

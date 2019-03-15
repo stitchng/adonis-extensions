@@ -39,7 +39,7 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 
 ```
 
->Using a _paramsMatch()_ custom method in routes for **start/routes.js**
+>Using a _paramsMatch()_ custom method in routes for **start/routes.js** (to sanitize route parameters at the start of the request cycle)
 
 ```js
 

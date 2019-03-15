@@ -18,7 +18,7 @@ test.group('AdonisJS [View] Extensions Provider Test(s)', (group) => {
   group.before(() => {
     ioc.singleton('Adonis/Src/View', () => {
       let View = require('./setup/View.js')
-      return new View()
+      return View
     })
   })
 
