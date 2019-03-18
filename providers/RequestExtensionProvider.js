@@ -47,7 +47,7 @@ class RequestExtensionProvider extends ServiceProvider {
     })
 
     Request.macro('port', function () {
-      let isSSL = (!!this.request.socket.encrypted)
+      let isSSL = this.secure()
 
       if (isSSL) {
         return '443'
