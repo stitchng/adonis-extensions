@@ -14,7 +14,7 @@ class ViewExtensionProvider extends ServiceProvider {
     this.app.bind('Adonis/Middleware/UpdateViewData', (app) => {
       let UpdateViewDataMiddleware = require('../src/Middleware/UpdateViewData.js')
       let Config = app.use('Adonis/Src/Config')
-      return UpdateViewDataMiddleware(Config)
+      return new UpdateViewDataMiddleware(Config)
     })
   }
 
@@ -37,6 +37,13 @@ class ViewExtensionProvider extends ServiceProvider {
     })
 
     /* eslint-disable no-useless-escape */
+
+    View.global('toButton', function (attributes = {}) {
+      let { type, tabIndex, disabled, name, id, className } = attributes
+
+      return this.safe(`<button` + (tabIndex ? ` tabindex="${tabIndex}"` : '') + (className ? ` class="${className}"` : '') + (id ? ` id="${id}"` : '') + (type ? ` type="${type}"` : '') + (name ? ` name="${name}"` : '') + (disabled ? ` disabled="${disabled}"` : '') + '><\/button>')
+    })
+
     View.global('toFrame', function (source, attributes = {}) {
       let assetsUrl = this.resolve('assetsUrl')
       let { frameborder, tabIndex, allowtransparency, sandbox, scrolling, name, id, className } = attributes
