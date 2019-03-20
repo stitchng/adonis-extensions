@@ -66,7 +66,7 @@ class RouteExtensionProvider extends ServiceProvider {
   boot () {
     const Route = this.app.use('Route')
     const Server = this.app.use('Server')
-    
+
     /* const escapeRegExp = function (string) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
     } */
