@@ -14,7 +14,7 @@ class ViewExtensionProvider extends ServiceProvider {
     this.app.bind('Adonis/Middleware/UpdateViewData', (app) => {
       let UpdateViewDataMiddleware = require('../src/Middleware/UpdateViewData.js')
       let Config = app.use('Adonis/Src/Config')
-      return UpdateViewDataMiddleware(Config)
+      return new UpdateViewDataMiddleware(Config)
     })
   }
 

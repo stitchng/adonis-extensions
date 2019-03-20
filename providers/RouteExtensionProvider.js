@@ -4,7 +4,7 @@ const { ServiceProvider } = require('@adonisjs/fold')
 
 class RouteExtensionProvider extends ServiceProvider {
   async paramsMatchMiddleware (ctx, next, [matchers = '%7B%7D']) {
-    const InvalidArgumentException = require('@adonisjs/generic-exceptions').InvalidArgumentException
+    const HttpException = require('@adonisjs/generic-exceptions').HttpException
     const params = ctx.params || {}
 
     const _unescape = function (str) {
@@ -33,10 +33,10 @@ class RouteExtensionProvider extends ServiceProvider {
           if ((RegExp(paramRegexStr)).test(paramValue)) {
             continue
           }
-          errorMsg = `@@adonisjs/Extensions: route parameter doesn't macth`
+          errorMsg = `@@adonisjs/Extensions: route parameter doesn't match`
         }
 
-        throw InvalidArgumentException.invoke(errorMsg)
+        throw new HttpException(errorMsg, 500, 'E_ROUTE_MISMATCH')
       }
     }
 
@@ -66,7 +66,7 @@ class RouteExtensionProvider extends ServiceProvider {
   boot () {
     const Route = this.app.use('Route')
     const Server = this.app.use('Server')
-
+    
     /* const escapeRegExp = function (string) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
     } */
@@ -87,6 +87,8 @@ class RouteExtensionProvider extends ServiceProvider {
     Server.registerNamed({ paramsMatch: this.paramsMatchMiddleware })
 
     Route.Route.macro('paramsMatch', function (matchers = {}) {
+      const InvalidArgumentException = require('@adonisjs/generic-exceptions').InvalidArgumentException
+
       let errorMsg = null
 
       for (var param in matchers) {
@@ -104,7 +106,7 @@ class RouteExtensionProvider extends ServiceProvider {
       }
 
       if (errorMsg !== null) {
-        throw new TypeError(errorMsg)
+        throw InvalidArgumentException.invoke(errorMsg)
       }
 
       this.middleware(`paramsMatch:${_escape(JSON.stringify(matchers))}`)
