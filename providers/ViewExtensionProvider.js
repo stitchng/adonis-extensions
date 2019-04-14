@@ -38,10 +38,10 @@ class ViewExtensionProvider extends ServiceProvider {
 
     /* eslint-disable no-useless-escape */
 
-    View.global('toButton', function (attributes = {}) {
+    View.global('toButton', function (buttonText, attributes = {}) {
       let { type, tabIndex, disabled, name, id, className } = attributes
 
-      return this.safe(`<button` + (tabIndex ? ` tabindex="${tabIndex}"` : '') + (className ? ` class="${className}"` : '') + (id ? ` id="${id}"` : '') + (type ? ` type="${type}"` : '') + (name ? ` name="${name}"` : '') + (disabled ? ` disabled="${disabled}"` : '') + '><\/button>')
+      return this.safe(`<button` + (tabIndex ? ` tabindex="${tabIndex}"` : '') + (className ? ` class="${className}"` : '') + (id ? ` id="${id}"` : '') + (type ? ` type="${type}"` : '') + (name ? ` name="${name}"` : '') + (disabled ? ` disabled="${disabled}"` : '') + '>' + buttonText + '<\/button>')
     })
 
     View.global('toFrame', function (source, attributes = {}) {

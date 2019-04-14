@@ -56,6 +56,12 @@ class RequestExtensionProvider extends ServiceProvider {
       return this.request.socket.localPort || this.request.socket.remotePort
     })
 
+    Request.macro('origin', function () {
+      let port = request.port()
+      
+      return `${request.protocol()}://${request.hostname()}${port ? ':' + port : ''}`
+    })
+
     Request.macro('userAgent', function () {
       return this.header('User-Agent')
     })
