@@ -8,7 +8,6 @@ class UpdateViewData {
 
   async handle ({ request, view }, next) {
     if (typeof view.share === 'function') {
-      
       view.share({
         full_year: `${(new Date()).getFullYear()}`,
         origin: request.origin()

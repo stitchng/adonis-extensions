@@ -22,6 +22,8 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 ```html
 
  <div class="variety">
+ {{ toButton('Send', { className:'btn-primary btn', id:'submit' }) }} <!-- <button  id="submit" class="btn-primary btn">Send</button> -->
+
  {{ toImage('images/category-one.jpg', { alt: 'ahoy everyone' }) }} <!-- <img src="http:127.0.0.1:3333/public/images/category-one.jpg" alt="ahoy everyone"> -->
 
  {{ toBigTextBox({ name:'tagline', className:'form-box' }, 'Just Say Hi!') }} <!-- <textarea class="form-box" name="tagline">Just Say Hi!</textarea> -->
@@ -64,16 +66,15 @@ class NodeThreadsManager {
 
     async handle({ request, response, view }, next){
 	    let started = false
+        let origin = request.origin()
 
-        let port = request.port()
-        let origin = `${request.protocol()}://${request.hostname()}${port?':'+port:''}`
-        
         if(request.currentRoute().name.indexOf('usethread') > -1){
 		    await start()
 		    started = true
 	    }else{
-            response.setHeaders(                    {'X-Context-Status':'1'}
-            )
+            response.setHeaders({
+                'X-Context-Status':'1'
+            })
         }
 
         await next()
