@@ -124,6 +124,6 @@ See the [CONTRIBUTING.md](https://github.com/stitchng/adonis-extensions/blob/mas
 [travis-image]: https://img.shields.io/travis/stitchng/adonis-extensions/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/stitchng/adonis-extensions
 
-[coveralls-image]: https://img.shields.io/coveralls/stitchng/adonis-extensions/develop.svg?style=flat-square
+[coveralls-image]: https://img.shields.io/coveralls/stitchng/adonis-extensions/master.svg?style=flat-square
 
 [coveralls-url]: https://coveralls.io/github/stitchng/adonis-extensions
