@@ -14,6 +14,7 @@ class ViewExtensionProvider extends ServiceProvider {
     this.app.bind('Adonis/Middleware/UpdateViewData', (app) => {
       let UpdateViewDataMiddleware = require('../src/Middleware/UpdateViewData.js')
       let Config = app.use('Adonis/Src/Config')
+
       return new UpdateViewDataMiddleware(Config)
     })
   }
@@ -28,6 +29,11 @@ class ViewExtensionProvider extends ServiceProvider {
  */
   boot () {
     const View = this.app.use('Adonis/Src/View')
+    /*const Server = this.app.use('Server')
+
+    Server.registerGlobal([
+      'Adonis/Middleware/UpdateViewData'
+    ])*/
 
     View.global('toImage', function (source, attributes = {}) {
       let assetsUrl = this.resolve('assetsUrl')

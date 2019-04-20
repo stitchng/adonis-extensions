@@ -48,6 +48,11 @@ class ResponseExtensionProvider extends ServiceProvider {
       return true
     })
 
+    Response.macro('getStatus', function(){
+      const statusCode = this.response.statusCode
+      return statusCode
+    })
+
     Response.macro('isEmpty', function () {
       let result = false
       switch (this.response.statusCode) {
