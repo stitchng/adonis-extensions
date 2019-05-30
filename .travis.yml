@@ -10,6 +10,9 @@ sudo: false
 
 install:
   - npm install
+
+after_script:
+  - npm run coverage
   
 notifications:
   email:

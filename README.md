@@ -41,7 +41,8 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 
 ```
 
->Using a _paramsMatch()_ custom method in routes for **start/routes.js** (to sanitize route parameters at the start of the request cycle)
+>Using a _paramsMatch()_ custom method in routes for **start/routes.js** (to sanitize route parameters at the start of the request cycle). A Cache headers
+middleware is ...
 
 ```js
 
@@ -50,7 +51,10 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
- Route.get('/stats/:category', 'AnalyticsController.getData').as('analytics.stats').paramsMatch({category:/^([a-f0-9]{19})$/})
+ Route.get('/insights/stats/:category', 'AnalyticsController.getInsights')
+    .as('analytics.stats')
+    .paramsMatch({category:/^([a-f0-9]{19})$/})
+    .middleware(['cache.headers:private,must-revalidate,max-age=6800'])
 
 ```
 
@@ -67,13 +71,15 @@ class NodeThreadsManager {
     async handle({ request, response, view }, next){
 	    let started = false
         let origin = request.origin()
+        let fingerprint = request.fingerprint()
 
-        if(request.currentRoute().name.indexOf('usethread') > -1){
+        if(request.currentRoute().isNamed('analytics.stats')){
 		    await start()
 		    started = true
-	    }else{
+	    
             response.setHeaders({
-                'X-Context-Status':'1'
+                'X-App-Recall-Count':'1',
+                'X-Request-Fingerprint':fingerprint
             })
         }
 

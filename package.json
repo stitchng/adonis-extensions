@@ -1,6 +1,6 @@
 {
   "name": "adonisjs-extensions",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An addon/plugin package to provide core extensions for AdonisJS 4.0+",
   "main": "index.js",
   "files": [
@@ -41,7 +41,8 @@
   },
   "dependencies": {
     "@adonisjs/generic-exceptions": "^2.0.1",
-    "debug": "^3.1.2"
+    "debug": "^3.1.2",
+    "murmurhash-native": "^3.4.1"
   },
   "devDependencies": {
     "japa": "^2.0.5",
