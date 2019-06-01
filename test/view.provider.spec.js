@@ -16,6 +16,28 @@ const ViewExtensionProvider = require('../providers/ViewExtensionProvider.js')
 
 test.group('AdonisJS [View] Extensions Provider Test(s)', (group) => {
   group.before(() => {
+    ioc.singleton('Server', () => {
+      return {
+        middlewares: {
+          named: {},
+          global: []
+        },
+        registerNamed: function (registrants = {}) {
+          for (let registerName in registrants) {
+            if (registrants.hasOwnProperty(registerName)) {
+              this.middlewares.named[registerName] = registrants[registerName]
+            }
+          }
+        },
+        registerGlobal: function (registrants = []) {
+          this.middlewares.global.push.apply(
+            this.middlewares.global,
+            registrants
+          )
+        }
+      }
+    })
+
     ioc.singleton('Adonis/Src/View', () => {
       let View = require('./setup/View.js')
       return View

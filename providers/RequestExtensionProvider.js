@@ -63,6 +63,8 @@ class RequestExtensionProvider extends ServiceProvider {
     const Server = this.app.use('Server')
     const RouteManager = this.app.use('Adonis/Src/Route')
 
+    Server.registerNamed({ 'cache.headers': this.cacheHeadersMiddleware })
+
     Request.getter('currentTime', function () {
       return Date.now()
     })
@@ -157,8 +159,6 @@ class RequestExtensionProvider extends ServiceProvider {
     Request.macro('hasHeader', function (headerText) {
       return (typeof this.header(headerText) === 'string')
     })
-
-    Server.registerNamed({ 'cache.headers': this.cacheHeadersMiddleware })
   }
 }
 

@@ -29,21 +29,20 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
       return {
         middlewares: {
           named: {},
-          global: {}
+          global: []
         },
         registerNamed: function (registrants = {}) {
           for (let registerName in registrants) {
             if (registrants.hasOwnProperty(registerName)) {
-              this.named[registerName] = registrants[registerName]
+              this.middlewares.named[registerName] = registrants[registerName]
             }
           }
         },
-        registerGlobal: function (registrants) {
-          for (let registerName in registrants) {
-            if (registrants.hasOwnProperty(registerName)) {
-              this.global[registerName] = registrants[registerName]
-            }
-          }
+        registerGlobal: function (registrants = []) {
+          this.middlewares.global.push.apply(
+            this.middlewares.global,
+            registrants
+          )
         }
       }
     })

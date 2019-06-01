@@ -31,7 +31,7 @@ class Operable {
   }
 
   static global (methodName, methodBody) {
-    this.engine.constructor.prototype.context[methodName] = methodBody
+    Engine.prototype.context[methodName] = methodBody
   }
 }
 
