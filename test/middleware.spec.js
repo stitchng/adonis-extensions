@@ -25,6 +25,29 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
       return config
     })
 
+    ioc.singleton('Server', () => {
+      return {
+        middlewares: {
+          named: {},
+          global: {}
+        },
+        registerNamed: function (registrants = {}) {
+          for (let registerName in registrants) {
+            if (registrants.hasOwnProperty(registerName)) {
+              this.named[registerName] = registrants[registerName]
+            }
+          }
+        },
+        registerGlobal: function (registrants) {
+          for (let registerName in registrants) {
+            if (registrants.hasOwnProperty(registerName)) {
+              this.global[registerName] = registrants[registerName]
+            }
+          }
+        }
+      }
+    })
+
     ioc.singleton('Adonis/Src/Request', () => {
       let Request = require('./setup/Request.js')
       return Request
@@ -61,7 +84,6 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
     context.view = new View({})
 
     const middleware = new UpdateDataMiddleware(ioc.use('Adonis/Src/Config'))
-    const engine = View.Engine()
 
     middleware
       .handle(context, async function () {
@@ -69,8 +91,8 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
       })
       .then(() => {
         assert.isFalse(middleware.minifyHtml)
-        assert.equal(engine.resolve('full_year'), 2019)
-        assert.equal(engine.resolve('origin'), 'http://127.0.0.1:8080')
+        assert.equal(context.view.engine.resolve('full_year'), 2019)
+        assert.equal(context.view.engine.resolve('origin'), 'http://127.0.0.1:8080')
       })
   })
 })

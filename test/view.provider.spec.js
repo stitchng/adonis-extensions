@@ -27,7 +27,7 @@ test.group('AdonisJS [View] Extensions Provider Test(s)', (group) => {
     viewExtProvider.boot()
 
     let View = ioc.use('Adonis/Src/View')
-    let engine = new View.Engine()
+    let engine = new View({})
 
     assert.isFunction(engine.resolve('toImage'))
     assert.isFunction(engine.resolve('favIcon'))

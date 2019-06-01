@@ -2,34 +2,25 @@
 
 const Operable = require('./Operable')
 
+const BasePresenter = function () {}
+
 class View extends Operable {
   constructor (locals = null) {
-    super()
-    this.constructor.Engine.prototype.locals = locals
+    super(locals)
+  }
+
+  get BasePresenter () {
+    return BasePresenter
+  }
+
+  render (name, data) {
+    return this.engine.render(name, data)
   }
 
   share (locals = {}) {
     if (locals instanceof Object) {
-      this.constructor.Engine.prototype.locals = locals
+      this.engine.constructor.prototype.locals = locals
     }
-  }
-}
-
-View.Engine = function () { }
-
-View.Engine.prototype.context = {}
-
-View.Engine.prototype.resolve = function (resolvable = '') {
-  if (typeof resolvable !== 'string') {
-    return null
-  }
-
-  if (this.locals[resolvable]) {
-    return this.locals[resolvable]
-  }
-
-  if (this.context[resolvable]) {
-    return this.context[resolvable]
   }
 }
 

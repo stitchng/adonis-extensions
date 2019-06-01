@@ -16,6 +16,29 @@ const RequestExtensionProvider = require('../providers/RequestExtensionProvider.
 
 test.group('AdonisJS [Request] Extensions Provider Test(s)', (group) => {
   group.before(() => {
+    ioc.singleton('Server', () => {
+      return {
+        middlewares: {
+          named: {},
+          global: {}
+        },
+        registerNamed: function (registrants = {}) {
+          for (let registerName in registrants) {
+            if (registrants.hasOwnProperty(registerName)) {
+              this.named[registerName] = registrants[registerName]
+            }
+          }
+        },
+        registerGlobal: function (registrants) {
+          for (let registerName in registrants) {
+            if (registrants.hasOwnProperty(registerName)) {
+              this.global[registerName] = registrants[registerName]
+            }
+          }
+        }
+      }
+    })
+
     ioc.singleton('Adonis/Src/Request', () => {
       let Request = require('./setup/Request.js')
       return Request
