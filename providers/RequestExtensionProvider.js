@@ -65,7 +65,6 @@ class RequestExtensionProvider extends ServiceProvider {
 
     Server.registerNamed({ 'cache.headers': this.cacheHeadersMiddleware })
 
-    
     Request.getter('currentTime', function () {
       return Date.now()
     })
