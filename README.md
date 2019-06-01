@@ -106,7 +106,6 @@ class NodeThreadsManager {
 }
 
 module.exports = NodeThreadsManager
-
 ```
 
 ## License
