@@ -40,10 +40,10 @@ test.group('AdonisJS [Request] Extensions Provider Test(s)', (group) => {
     assert.isFunction(request.expectsJsonBody)
     assert.isFunction(request.hasHeader)
     assert.isFunction(request.userAgent)
-    assert.isFunction(request.fingerprint)
+    // assert.isFunction(request.fingerprint)
     assert.isFunction(request.isMethodCacheable)
     assert.isFunction(request.referer)
 
-    assert.exists(request.fingerprint())
+    // assert.exists(request.fingerprint())
   })
 })

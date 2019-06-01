@@ -1,6 +1,6 @@
 'use strict'
 
-const murmurhash = require('murmurhash-native')
+// const murmurhash = require('murmurhash-native')
 const { ServiceProvider } = require('@adonisjs/fold')
 const url = require('url')
 
@@ -110,7 +110,7 @@ class RequestExtensionProvider extends ServiceProvider {
       return current
     })
 
-    Request.macro('fingerprint', function (unique = true) {
+    /* Request.macro('fingerprint', function (unique = true) {
       // If requests exceed 1 billion, collion make occur (rate:2%)
       let currentRoute = this.currentRoute()
 
@@ -122,7 +122,7 @@ class RequestExtensionProvider extends ServiceProvider {
         (unique === true ? [this.method()] : currentRoute.verbs),
         [currentRoute.domain, this.url(), this.ip()]
       ).join('|'))
-    })
+    }) */
 
     Request.macro('referer', function () {
       return this.header('Referer')

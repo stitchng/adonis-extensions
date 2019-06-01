@@ -5,7 +5,6 @@
 - Fixed logic in `response.isEmpty()`
 
 ### Features Added
-- Added `request.fingerprint()`
 - Added `request.isMethodCacheable()`
 - Added `request.referer()`
 - Added `request.currentRoute().isNamed()`
