@@ -8,21 +8,38 @@ class RequestExtensionProvider extends ServiceProvider {
 /**
  * Setup 'Cache-Control' response headers
  * taking into consideration the request
- * 
- * @param {Object} ctx 
- * @param {Function} next 
+ *
+ * @param {Object} ctx
+ * @param {Function} next
  * @param {Array} [-destructured-]
- * 
+ *
  * @method cacheHeadersMiddleware
- * 
+ *
  * @return {Promise}
  */
- async cacheHeadersMiddleware(ctx, next, [directives = 'no-store,max-age=0']){
+  async cacheHeadersMiddleware (ctx, next, directives = ['no-store', 'max-age=0']) {
+    await next()
 
-    let cacheInstructions = ctx.request.header('Cache-Control')
- }
+    if (ctx.request.isMethodCacheable() || !ctx.response.isEmpty()) {
+      let clientInstructions = ctx.request.header('Cache-Control')
 
-/**
+      if (typeof clientInstructions === 'string' &&
+          clientInstructions.length > 3 &&
+            clientInstructions.indexOf(',') + 1) {
+        clientInstructions = clientInstructions.split(',')
+      }
+
+      if (Array.isArray(directives)) {
+        this.setDirectives(ctx, directives)
+      }
+    }
+  }
+
+  setDirectives (ctx, directives) {
+    ctx.response.header('Cache-Control', directives.join(','))
+  }
+
+  /**
  * Register namespaces to the IoC container
  *
  * @method register
@@ -62,27 +79,59 @@ class RequestExtensionProvider extends ServiceProvider {
       let urlParts = url.parse(this.url(), true)
       let route = RouteManager.match(urlParts.pathname, this.method().toUpperCase(), urlParts.host)
 
-      let current = ( route !== null ? route.route.toJSON() : { name: '', route: null, verbs: [], middleware: [], handler: null, domain: null })
+      let current = (route !== null ? route.route.toJSON() : { name: '', route: null, verbs: [], middleware: [], handler: null, domain: null })
 
-      current.isNamed = function(...patterns){
+      current.isNamed = function (...patterns) {
+        let routeName = this.name
 
-      };
+        if (!routeName) {
+          return false
+        }
+
+        for (let i = 0; i < patterns.length; i++) {
+          let pattern = patterns[i]
+
+          if (pattern === this.name) {
+            return true
+          }
+
+          pattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+          pattern = pattern.replace(/\\\*/gm, '.*')
+
+          if ((new RegExp(pattern)).test(this.name)) {
+            return true
+          }
+        }
+
+        return false
+      }
 
       return current
     })
 
     Request.macro('fingerprint', function (unique = true) {
-       // If requests exceed 1 billion, collion make occur (rate:2%)
+      // If requests exceed 1 billion, collion make occur (rate:2%)
       let currentRoute = this.currentRoute()
 
-      if(currentRoute.route === null){
-         return null;
+      if (currentRoute.route === null) {
+        return null
       }
 
       return murmurhash.murmurHash64x86([].concat(
         (unique === true ? [this.method()] : currentRoute.verbs),
         [currentRoute.domain, this.url(), this.ip()]
-      ).join('|'));
+      ).join('|'))
+    })
+
+    Request.macro('referer', function () {
+      return this.header('Referer')
+    })
+
+    Request.macro('isMethodCacheable', function () {
+      let method = this.method().toLowerCase()
+
+      return (method === 'get' || method === 'head')
     })
 
     Request.macro('port', function () {

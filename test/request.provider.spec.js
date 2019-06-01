@@ -32,7 +32,7 @@ test.group('AdonisJS [Request] Extensions Provider Test(s)', (group) => {
     requestExtProvider.boot()
 
     let Request = ioc.use('Adonis/Src/Request')
-    let request = new Request({ 'Connection': 'keep-alive', 'Accept': 'text/html' })
+    let request = new Request({ 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Accept': 'text/html' })
 
     assert.isFunction(request.currentRoute)
     assert.isFunction(request.port)
@@ -40,5 +40,10 @@ test.group('AdonisJS [Request] Extensions Provider Test(s)', (group) => {
     assert.isFunction(request.expectsJsonBody)
     assert.isFunction(request.hasHeader)
     assert.isFunction(request.userAgent)
+    assert.isFunction(request.fingerprint)
+    assert.isFunction(request.isMethodCacheable)
+    assert.isFunction(request.referer)
+
+    assert.exists(request.fingerprint())
   })
 })

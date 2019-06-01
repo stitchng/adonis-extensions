@@ -4,7 +4,7 @@ const { ServiceProvider } = require('@adonisjs/fold')
 
 class RouteExtensionProvider extends ServiceProvider {
   async paramsMatchMiddleware (ctx, next, [matchers = '%7B%7D']) {
-    const HttpException = require('@adonisjs/generic-exceptions').HttpException
+    const RouteMisMatchException = require('../src/Exceptions/RouteMisMatchException.js')
     const params = ctx.params || {}
 
     const _unescape = function (str) {
@@ -36,7 +36,7 @@ class RouteExtensionProvider extends ServiceProvider {
           errorMsg = `@@adonisjs/Extensions: route parameter doesn't match`
         }
 
-        throw new HttpException(errorMsg, 500, 'E_ROUTE_MISMATCH')
+        throw new RouteMisMatchException(errorMsg)
       }
     }
 

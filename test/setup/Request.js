@@ -3,7 +3,7 @@
 const Macroable = require('./Macroable')
 
 class Request extends Macroable {
-  constructor (headers = {}) {
+  constructor (headers = { 'Host': '127.0.0.1' }) {
     super()
     this.request = { headers, socket: { localPort: null, remotePort: '8080', encrypted: false } }
   }
@@ -31,6 +31,22 @@ class Request extends Macroable {
 
   hostname () {
     return '127.0.0.1'
+  }
+
+  ip () {
+    return '127.0.0.1'
+  }
+
+  method () {
+    return 'POST'
+  }
+
+  url () {
+    return '/user/new/:id'
+  }
+
+  header (name) {
+    return (this.request.headers[name] || null)
   }
 }
 

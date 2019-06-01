@@ -58,15 +58,16 @@ class ResponseExtensionProvider extends ServiceProvider {
       switch (this.response.statusCode) {
         case 304: // Not Modified [HTTP]
         case 204: // No Content [HTTP]
-        case 301: // Temp Redirect [HTTP]
-        case 302: // Perm Redirect [HTTP]
+        case 301: //  Redirect [HTTP]
+        case 302: // Moved Temporarily Redirect [HTTP]
         case 303: // See-Other Redirect [HTTP]
         case 100: // Continue [HTTP]
+        case 102: // Processing [HTTP]
           result = true
           break
 
         default:
-          return false
+          return result
       }
 
       return result
