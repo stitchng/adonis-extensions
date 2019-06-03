@@ -100,8 +100,15 @@ class RouteExtensionProvider extends ServiceProvider {
             break
           }
 
-          let regexpStr = matcher.toString().replace(/\//g, '')
-          matchers[param] = regexpStr
+          let flags = matcher.flags
+
+          let regexpStr = matcher.toString()
+
+          if (flags) {
+            regexpStr = regexpStr.replace(new RegExp(`\\${flags}$`, 'g'), '')
+          }
+
+          matchers[param] = regexpStr.replace(/\//g, '')
         }
       }
 

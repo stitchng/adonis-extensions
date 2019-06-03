@@ -18,6 +18,8 @@ class RequestExtensionProvider extends ServiceProvider {
  * @return {Promise}
  */
   async cacheHeadersMiddleware (ctx, next, directives = ['no-store', 'max-age=0']) {
+    ctx.response.implicitEnd = true
+
     await next()
 
     if (ctx.request.isMethodCacheable() || !ctx.response.isEmpty()) {
@@ -33,10 +35,14 @@ class RequestExtensionProvider extends ServiceProvider {
         this.setDirectives(ctx, directives)
       }
     }
+
+    return ctx.response.end()
   }
 
   setDirectives (ctx, directives) {
-    ctx.response.header('Cache-Control', directives.join(','))
+    if (ctx.response.isPending) {
+      ctx.response.header('Cache-Control', directives.join(','))
+    }
   }
 
   /**
@@ -112,7 +118,7 @@ class RequestExtensionProvider extends ServiceProvider {
       return current
     })
 
-    /* Request.macro('fingerprint', function (unique = true) {
+    Request.macro('fingerprint', function (unique = true) {
       // If requests exceed 1 billion, collion make occur (rate:2%)
       let currentRoute = this.currentRoute()
 
@@ -120,11 +126,11 @@ class RequestExtensionProvider extends ServiceProvider {
         return null
       }
 
-      return murmurhash.murmurHash64x86([].concat(
+      return ([].concat(
         (unique === true ? [this.method()] : currentRoute.verbs),
         [currentRoute.domain, this.url(), this.ip()]
       ).join('|'))
-    }) */
+    })
 
     Request.macro('referer', function () {
       return this.header('Referer')
