@@ -28,10 +28,10 @@ class RouteExtensionProvider extends ServiceProvider {
         paramValue = params[paramKey] || null
         paramRegexStr = matchers[paramKey] || null
 
-        if ((paramValue !== null) &&
+        if (/*(paramValue !== null) &&*/
                     (paramRegexStr !== null)) {
-          if ((RegExp(paramRegexStr)).test(paramValue)) {
-            continue
+          if ((new RegExp(paramRegexStr)).test(paramValue)) {
+            continue;
           }
           errorMsg = `@@adonisjs/Extensions: route parameter doesn't match`
         }

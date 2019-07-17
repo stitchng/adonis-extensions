@@ -146,3 +146,11 @@ See the [CONTRIBUTING.md](https://github.com/stitchng/adonis-extensions/blob/mas
 [coveralls-image]: https://img.shields.io/coveralls/stitchng/adonis-extensions/master.svg?style=flat-square
 
 [coveralls-url]: https://coveralls.io/github/stitchng/adonis-extensions
+
+## Support 
+
+**Coolcodes** is a non-profit software foundation (collective) created by **Oparand** - parent company of StitchNG, Synergixe based in Abuja, Nigeria. You'll find an overview of all our work and supported open source projects on our [Facebook Page](https://www.facebook.com/coolcodes/).
+
+>Follow us on facebook if you can to get the latest open source software/freeware news and infomation.
+
+Does your business depend on our open projects? Reach out and support us on [Patreon](https://www.patreon.com/coolcodes/). All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
