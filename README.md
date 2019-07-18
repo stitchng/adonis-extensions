@@ -77,9 +77,9 @@ const Route = use('Route')
 
 'use strict'
 
-const { start, stop } =  require('microjob')
+const { start, job, stop } =  require('microjob')
 
-class NodeThreadsManager {
+class RouteThreadsManager {
 
     async handle({ request, response, view }, next){
 	    let started = false
@@ -88,7 +88,7 @@ class NodeThreadsManager {
 
         if(!origin.contains('.oaksearch.com.ng')
             && request.currentRoute().isNamed('analytics.*')){ // 'analytics.stats' route will pass here
-		    await start()
+		    await start({maxWorkers: 1});
 		    started = true
 	    
             response.setHeaders({
@@ -97,15 +97,18 @@ class NodeThreadsManager {
             })
         }
 
-        await next()
-
-	    if(started === true){
+	    if(started !== true){
+            await next();
+        }else{
+            await job ( async () => {
+                await next();
+            });
 		    await stop()
 	    }
     }
 }
 
-module.exports = NodeThreadsManager
+module.exports = RouteThreadsManager
 ```
 
 ## License

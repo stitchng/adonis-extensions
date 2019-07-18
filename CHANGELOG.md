@@ -1,3 +1,9 @@
+<a name="0.0.8"></a>
+# 0.0.8 (2019-07-18)
+
+### Bug Fixes
+- Fixed logic error in `paramsMatch()` method for route params opened by [@isocroft](https://www.github.com/isocroft) for [Issue #6](https://github.com/stitchng/adonis-extensions/issues/6)
+
 <a name="0.0.7"></a>
 # 0.0.7 (2019-06-03)
 
@@ -5,7 +11,7 @@
 - Fixed logic error in `paramsMatch()` method for routes
 
 ### Features Added
-- Added `request.fingerprint()`
+- Added `request.fingerprint()` (wip)
 
 <a name="0.0.6"></a>
 # 0.0.6 (2019-06-01)
