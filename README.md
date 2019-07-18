@@ -97,14 +97,14 @@ class RouteThreadsManager {
             })
         }
 
-	    if(started !== true){
+        if(started !== true){
             await next();
         }else{
             await job ( async () => {
                 await next();
             });
-		    await stop()
-	    }
+            await stop()
+        }
     }
 }
 
