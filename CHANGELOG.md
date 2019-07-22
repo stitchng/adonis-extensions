@@ -1,3 +1,9 @@
+<a name="0.0.9"></a>
+# 0.0.9 (2019-07-22)
+
+### Bug Fixes
+- {Typo} Fixed incorrect behavior in `request.port()`
+
 <a name="0.0.8"></a>
 # 0.0.8 (2019-07-18)
 

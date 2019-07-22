@@ -143,10 +143,10 @@ class RequestExtensionProvider extends ServiceProvider {
     })
 
     Request.macro('port', function () {
-      let isSSL = this.secure()
+      let hasSSL = this.secure()
 
-      if (isSSL) {
-        return '443'
+      if (hasSSL) {
+        return '' // port: 443
       }
 
       return this.request.socket.localPort || this.request.socket.remotePort
@@ -155,7 +155,7 @@ class RequestExtensionProvider extends ServiceProvider {
     Request.macro('origin', function () {
       let port = this.port()
 
-      return `${this.protocol()}://${this.hostname()}${port ? ':' + port : ''}`
+      return `${this.protocol()}://${this.hostname()}${port !== '' ? ':' + port : ''}`
     })
 
     Request.macro('userAgent', function () {
