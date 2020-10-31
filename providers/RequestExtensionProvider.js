@@ -134,7 +134,7 @@ class RequestExtensionProvider extends ServiceProvider {
       
       const hash = mhash3.hashBytes(key, key.length, 10);
       
-      return (new Number(Math.abs(hash) % 262144).toString(16)); 
+      return (new Number(Math.abs(hash) % 262144263494052048758).toString(16)); 
     })
 
     Request.macro('referer', function () {
