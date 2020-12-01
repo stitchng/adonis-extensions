@@ -3,6 +3,7 @@
 // const murmurhash = require('murmurhash-native')
 const { ServiceProvider } = require('@adonisjs/fold')
 const url = require('url')
+const mhash3 = require('../src/libs/murmur-hash.3.js');
 
 class RequestExtensionProvider extends ServiceProvider {
 /**
@@ -126,10 +127,14 @@ class RequestExtensionProvider extends ServiceProvider {
         return null
       }
 
-      return ([].concat(
+      const key = ([].concat(
         (unique === true ? [this.method()] : currentRoute.verbs),
         [currentRoute.domain, this.url(), this.ip()]
-      ).join('|'))
+      ).join('|'));
+      
+      const hash = mhash3.hashBytes(key, key.length, 10);
+      
+      return (new Number(Math.abs(hash) % 262144263494052048758).toString(16)); 
     })
 
     Request.macro('referer', function () {
