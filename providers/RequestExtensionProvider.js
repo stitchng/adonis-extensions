@@ -1,9 +1,8 @@
 'use strict'
 
-// const murmurhash = require('murmurhash-native')
 const { ServiceProvider } = require('@adonisjs/fold')
 const url = require('url')
-const mhash3 = require('../src/libs/murmur-hash.3.js');
+const mhash3 = require('../src/libs/murmur-hash.3.js')
 
 class RequestExtensionProvider extends ServiceProvider {
 /**
@@ -130,11 +129,11 @@ class RequestExtensionProvider extends ServiceProvider {
       const key = ([].concat(
         (unique === true ? [this.method()] : currentRoute.verbs),
         [currentRoute.domain, this.url(), this.ip()]
-      ).join('|'));
-      
-      const hash = mhash3.hashBytes(key, key.length, 10);
-      
-      return (new Number(Math.abs(hash) % 262144263494052048758).toString(16)); 
+      ).join('|'))
+
+      const hash = mhash3.hashBytes(key, key.length, 10)
+
+      return (Number(Math.abs(hash) % 262144263494052048758).toString(16))
     })
 
     Request.macro('referer', function () {

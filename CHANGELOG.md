@@ -1,3 +1,10 @@
+<a name="0.0.10"></a>
+# 0.0.10 (2020-12-01)
+
+### Bug Fixes
+- {Update} Fixed incorrect behavior in `request.fingerprint()`
+- {Chore} Removed module dependency `murmurhash-native@3.4.1`
+
 <a name="0.0.9"></a>
 # 0.0.9 (2019-07-22)
 
