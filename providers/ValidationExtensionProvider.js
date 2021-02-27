@@ -51,7 +51,7 @@ class ValidationExtensionProvider extends ServiceProvider {
     }
 
     Validator.extend('digitString', digitStringValidator)
-    Validator.extend('maxValue', minValueValidator)
+    Validator.extend('minValue', minValueValidator)
     Validator.extend('maxValue', maxValueValidator)
   }
 }
