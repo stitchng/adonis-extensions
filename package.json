@@ -41,7 +41,8 @@
   },
   "dependencies": {
     "@adonisjs/generic-exceptions": "^2.0.1",
-    "debug": "^3.1.2"
+    "debug": "^3.1.2",
+    "safe-json-stringify": "^1.2.0"
   },
   "peerDependencies": {
     "@adonisjs/framework": "^5.0.9"
