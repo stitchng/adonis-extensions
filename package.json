@@ -1,6 +1,6 @@
 {
   "name": "adonisjs-extensions",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "An addon/plugin package to provide core extensions for AdonisJS 4.0+",
   "main": "index.js",
   "files": [
@@ -43,6 +43,9 @@
     "@adonisjs/generic-exceptions": "^2.0.1",
     "debug": "^3.1.2"
   },
+  "peerDependencies": {
+    "@adonisjs/framework": "^5.0.9"
+  },
   "devDependencies": {
     "japa": "^2.0.5",
     "japa-cli": "^1.0.1",
@@ -50,7 +53,8 @@
     "semver": "^5.5.0",
     "standard": "^12.0.1",
     "@adonisjs/sink": "^1.0.6",
-    "@adonisjs/fold": "^4.0.9"
+    "@adonisjs/fold": "^4.0.9",
+    "@adonisjs/framework": "^5.0.9"
   },
   "repository": {
     "type": "git",
