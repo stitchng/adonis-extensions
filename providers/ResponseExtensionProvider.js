@@ -7,6 +7,51 @@ const destroy = require('destroy')
 const safeStringify = require('safe-json-stringify')
 const { ServiceProvider } = require('@adonisjs/fold')
 
+const entityBody =  {
+  stream: function streamer (res, body) {
+    return new Promise((resolve, reject) => {
+    if (typeof (body.pipe) !== 'function') {
+      reject(new Error('[adonisjs-extensions]: cannot find a valid read-stream'))
+      return
+    }
+
+    let finished = false
+
+    /**
+     * Error in stream
+     */
+    body.on('error', (error) => {
+      if (finished) {
+        return
+      }
+
+      finished = true
+      destroy(body)
+
+      reject(error)
+    })
+
+    /**
+     * Consumed stream
+     */
+    body.on('end', resolve)
+
+    /**
+     * Written response
+     */
+    onFinished(res, function () {
+      finished = true
+      destroy(body)
+    })
+
+    /**
+     * Pipe to res
+     */
+    body.pipe(res)
+  })
+  }
+}
+
 class ResponseExtensionProvider extends ServiceProvider {
 /**
  * Register namespaces to the IoC container
