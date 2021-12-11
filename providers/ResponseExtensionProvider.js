@@ -119,7 +119,9 @@ class ResponseExtensionProvider extends ServiceProvider {
         }
 
         get nextChunk () {
-          return this._backPressureQueue.shift()
+          return this._backPressureQueue.length
+            ? this._backPressureQueue.shift()
+            : null
         }
 
         set nextChunk (chunk) {
