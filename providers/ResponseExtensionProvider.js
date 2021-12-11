@@ -250,7 +250,7 @@ class ResponseExtensionProvider extends ServiceProvider {
 
     Response.macro('sendToStream', (body) => {
       if (!this.willTransform) {
-        throw new Error('@adonisjs-extensions: Cannot call `response.sendToStream()` without calling `response.transform()` first')
+        throw new Error('[adonisjs-extensions]: Cannot call `response.sendToStream()` without calling `response.transform()` first')
       }
 
       const ContentType = this.adonisRequest.header('Accept', '*/*')
