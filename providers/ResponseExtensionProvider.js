@@ -127,7 +127,7 @@ class ResponseExtensionProvider extends ServiceProvider {
           readStream = that.__stream.pipe(gzipStream)
         }
 
-        nodeRes.stream(that.response, readStream).catch(
+        entityBody.stream(that.response, readStream).catch(
           error => that.abortIf(true, 500, `Something unexpected happend: ${error.message}`)
         )
       })
