@@ -77,34 +77,43 @@ const Route = use('Route')
 
 'use strict'
 
-const { start, job, stop } =  require('microjob')
-
 class RouteThreadsManager {
 
-    async handle({ request, response, view }, next){
-	    let started = false
-        let origin = request.origin()
-        let fingerprint = request.fingerprint()
+    async handle({ request, response }, next){
+	    let isAjax = request.ajax()
+      // get the origin of the adonisjs server
+      let origin = request.origin()
+      // get the request fingerprint of the adonisjs server (unique per request)
+      let fingerprint = request.fingerprint()
 
-        if(!origin.contains('.oaksearch.com.ng')
-            && request.currentRoute().isNamed('analytics.*')){ // 'analytics.stats' route will pass here
-		    await start({maxWorkers: 1});
-		    started = true
-	    
-            response.setHeaders({
-                'X-App-Recall-Count':'1',
-                'X-Request-Fingerprint':fingerprint
-            })
-        }
+      if (!origin.contains('.oaksearch.com.ng')
+          && request.currentRoute().isNamed('analytics.*')) { // 'analytics.stats' route will pass here
+ 
+        response.setHeaders({
+          'X-App-Recall-Count': '1',
+          'X-Request-Fingerprint': fingerprint
+        })
+      }
 
-        if(started !== true){
-            await next();
-        }else{
-            await job ( async () => {
-                await next();
-            });
-            await stop()
+      const delay = function callback (time) {
+        return new Promise((resolve) => {
+          return setTimeout(resolve, time)
+        })
+      }
+
+      // Transform the response so that it is streamed (NodeJS streams)
+      response.transform()
+
+      if (!isAjax) {
+        for (let count = 0; count < 5; count++) {
+          // delay with a promise using `setTimeout()`
+          await delay(count * 1000)
+          // send data to the NodeJS stream
+          response.sendToStream(Date.now())
         }
+      }
+
+      await next();
     }
 }
 
