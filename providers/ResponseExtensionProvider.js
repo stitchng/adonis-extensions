@@ -134,7 +134,7 @@ class ResponseExtensionProvider extends ServiceProvider {
 
       this.__emitter.on('adonisjs_stream_data', ({ body, notJson }) => {
         const data = notJson || typeof body !== 'object' ? String(body) : safeStringify(body)
-        const payload = data instanceof Buffer ? data : Buffer.from(data, encoding)
+        const payload = data instanceof Buffer ? data : Buffer.from(data, encoding.replace(/^us-/, ''))
 
         if (chunked) {
           if (multipart) {
