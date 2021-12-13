@@ -272,7 +272,7 @@ class ResponseExtensionProvider extends ServiceProvider {
             body,
             [this.Config.get('app.http.etag')]
           )
-          return false
+          return this._canStream
         }
 
         this.__emitter.emit('adonisjs_stream_data', { body, notJson: isNotJSONRequest })
