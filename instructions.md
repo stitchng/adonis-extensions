@@ -163,6 +163,7 @@ const Route = use('Route')
 Route.get('/timestamp', function ({ response }) {
   response.sendToStream({ time: Date.now() })
 }).middleware(['auth', 'stream:chunked']).as('app.timestamping')
+
 ## Docs
 
 To find out more, read the docs [here](https://github.com/stitchng/adonis-extensions).
