@@ -284,7 +284,7 @@ class ResponseExtensionProvider extends ServiceProvider {
         })
       }
 
-      return true
+      return this._canStream
     })
  
     Response.macro('setHeaders', function (headers = {}) {
