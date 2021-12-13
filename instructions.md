@@ -152,7 +152,17 @@ module.exports = {
   ...
 }
 ```
+## Using NodeJS Streams (HTTP Streaming / Compression)
 
+>You have to include the `stream` named middleware (and optionally set AdonisJS middleware arguments: `stream: chunked, multipart`) to utilise **NodeJS Streams** on the route you wish to enable HTTP streaming and/or HTTP compression. The `chunkedResponse` config in _config/extensions.js_ is used only for app-level configurations while the middleware argument is used for route-level configurations.
+
+```js
+
+const Route = use('Route')
+
+Route.get('/timestamp', function ({ response }) {
+  response.sendToStream({ time: Date.now() })
+}).middleware(['auth', 'stream:chunked']).as('app.timestamping')
 ## Docs
 
 To find out more, read the docs [here](https://github.com/stitchng/adonis-extensions).
