@@ -163,6 +163,7 @@ const Route = use('Route')
 Route.get('/timestamp', function ({ response }) {
   response.sendToStream({ time: Date.now() })
 }).middleware(['auth', 'stream:chunked']).as('app.timestamping')
+```
 
 ## Docs
 
