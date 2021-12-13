@@ -189,9 +189,9 @@ class ResponseExtensionProvider extends ServiceProvider {
               'Content-Length',
               String(payload.length)
             )
-            this.__stream.nextChunk = `\r\n`
+            this.__stream.nextChunk = Buffer.from('\r\n', 'ascii')
           } else {
-            this.__stream.nextChunk = `${payload.length}\r\n`
+            this.__stream.nextChunk = Buffer.from(`${payload.length}\r\n`, 'ascii')
           }
         }
 
