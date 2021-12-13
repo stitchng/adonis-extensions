@@ -157,6 +157,7 @@ module.exports = {
 
 ```js
 
+/** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
 Route.get('/timestamp', function ({ response }) {
