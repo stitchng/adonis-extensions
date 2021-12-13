@@ -89,7 +89,7 @@ class ResponseExtensionProvider extends ServiceProvider {
       })
     })
 
-    Response.macro('transform', function (encoding = 'utf8', chunked = false, multipart = false) {
+    Response.macro('transform', function (encoding = 'utf8', { chunked = false, multipart = false }) {
       if (this.willTransform) {
         throw new Error('[adonisjs-extensions]: Cannot call `response.transform()` more than once')
       }
