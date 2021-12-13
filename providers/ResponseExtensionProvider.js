@@ -159,6 +159,11 @@ class ResponseExtensionProvider extends ServiceProvider {
 
       const compressionAlgo = this.Config.get('app.http.compression.algo')
 
+      if (multipart) {
+        this.multiPartBoundary = Number(1 + Math.random() * 234567890).toString(16).replace('.', Date.now())
+        this.safeHeader('Content-Type', `multipart/x-mixed-replace; boundary="${this.multiPartBoundary}"`)
+      }
+
       setImmediate(() => {
         const that = this
         let readStream = that.__stream
