@@ -177,7 +177,7 @@ class ResponseExtensionProvider extends ServiceProvider {
         }
 
         entityBody.stream(that.response, readStream).catch(
-          error => that.abortIf(true, error.code === 'ENOENT' ? 404 : 500, `Something unexpected happened: ${error.message}`)
+          error => that.abortIf(error !== null, error.code === 'ENOENT' ? 404 : 500, `Something unexpected happened: ${error.message}`)
         )
       })
 
