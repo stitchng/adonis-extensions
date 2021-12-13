@@ -277,7 +277,11 @@ class ResponseExtensionProvider extends ServiceProvider {
           return this._canStream
         }
 
-        this.__emitter.emit('adonisjs_stream_data', { body, notJson: isNotJSONRequest })
+        this.__emitter.emit('adonisjs_stream_data', {
+          body,
+          notJson: isNotJSONRequest,
+          contentType: multiPartContentType
+        })
       }
 
       return true
