@@ -197,6 +197,7 @@ class ResponseExtensionProvider extends ServiceProvider {
 
         if (chunked) {
           if (multipart) {
+            const isFirstMultipartBlock = this.__stream._backPressureQueue.length === 0
             this.__stream.nextChunk = Buffer.concat([
               Buffer.from(`\r\n--${this.multiPartBoundary}\r\n`, 'ascii'),
               Buffer.from(`Content-Type: ${contentType}\r\n`, 'ascii'),
