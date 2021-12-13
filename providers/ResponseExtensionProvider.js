@@ -218,7 +218,7 @@ class ResponseExtensionProvider extends ServiceProvider {
       this.safeHeader('Connection', 'keep-alive')
 
       if (TransferEncoding === emptySentinel) {
-        if (Encoding.includes(String(compressionAlgo))) {
+        if (compressionIsEnabled && Encoding.includes(String(compressionAlgo))) {
           this.safeHeader(
             'Content-Encoding',
             compressionAlgo
