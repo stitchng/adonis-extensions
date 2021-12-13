@@ -259,7 +259,7 @@ class ResponseExtensionProvider extends ServiceProvider {
       return this
     })
 
-    Response.macro('sendToStream', (body) => {
+    Response.macro('sendToStream', (body, multiPartContentType = 'text/plain; charset=utf-8') => {
       if (!this.willTransform) {
         throw new Error('[adonisjs-extensions]: Cannot call `response.sendToStream()` without calling `response.transform()` first')
       }
