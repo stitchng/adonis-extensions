@@ -185,10 +185,10 @@ class ResponseExtensionProvider extends ServiceProvider {
 
         if (chunked) {
           if (multipart) {
-            this.safeHeader(
-              'Content-Length',
-              String(payload.length)
-            )
+            this.__stream.nextChunk = Buffer.concat([
+              Buffer.from(`\r\n--${this.multiPartBoundary}\r\n`, 'ascii'),
+              Buffer.from(`Content-Type: ${contentType}\r\n`, 'ascii'),
+              Buffer.from(`Content-Length: ${payload.length}\r\n\r\n`, 'ascii'),
             this.__stream.nextChunk = Buffer.from('\r\n', 'ascii')
           } else {
             this.__stream.nextChunk = Buffer.from(`${payload.length}\r\n`, 'ascii')
