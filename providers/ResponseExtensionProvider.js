@@ -225,7 +225,7 @@ class ResponseExtensionProvider extends ServiceProvider {
           )
         }
       } else {
-        if (TransferEncoding.includes(String(compressionAlgo))) {
+        if (compressionIsEnabled && TransferEncoding.includes(String(compressionAlgo))) {
           this.safeHeader(
             'Transfer-Encoding',
             `${compressionAlgo}${chunked ? ', chunked' : ''}`
