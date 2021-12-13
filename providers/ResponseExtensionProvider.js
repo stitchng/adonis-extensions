@@ -235,8 +235,8 @@ class ResponseExtensionProvider extends ServiceProvider {
         this._lazyBody.args = []
 
         if (chunked) {
-          this.__stream.nextChunk = `0\r\n`
-          this.__stream.nextChunk = `\r\n`
+          this.__stream.nextChunk = Buffer.from('0\r\n', 'ascii')
+          this.__stream.nextChunk = Buffer.from('\r\n', 'ascii')
         } else {
           this.__stream.nextChunk = this._lazyBody.content
         }
