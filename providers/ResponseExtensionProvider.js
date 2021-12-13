@@ -104,9 +104,6 @@ class ResponseExtensionProvider extends ServiceProvider {
 
       if (!this.isPending || this.response.finished) {
         this.__hasSentResponse = true
-      }
-
-      if (!compressionIsEnabled || this.__hasSentResponse) {
         this._canStream = false
         return this
       }
