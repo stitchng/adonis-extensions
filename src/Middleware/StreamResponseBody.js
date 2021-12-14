@@ -8,12 +8,10 @@ class StreamResponseBody {
   }
 
   async handle ({ request, response }, next, [ chunked, multipart ]) {
-    const accept = request.header('Accept', '')
+    const [ , charset ] = request.header('Accept', '').match(/^(?:[^;]+); charset=(.*)\b|$/)
     const charsets = request.header(
       'Accept-Charset',
-      accept.replace(/\b; charset=(.*)$/, function(pattern, substring) {
-        return typeof pattern === 'string' ? substring : null
-      })
+      charset
     )
 
     response.transform(
