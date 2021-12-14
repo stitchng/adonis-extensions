@@ -18,7 +18,7 @@ class RequestExtensionProvider extends ServiceProvider {
  * @return {Promise}
  */
   async cacheHeadersMiddleware (ctx, next, directives = ['no-store', 'max-age=0']) {
-    ctx.response.implicitEnd = true
+    ctx.response.implicitEnd = false
 
     await next()
 
@@ -36,7 +36,7 @@ class RequestExtensionProvider extends ServiceProvider {
       }
     }
 
-    return ctx.response.end()
+    ctx.response.implicitEnd = true
   }
 
   setDirectives (ctx, directives) {
