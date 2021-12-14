@@ -2,7 +2,8 @@
 
 const zlib = require('zlib');
 const EventEmitter = require('events');
-const { Readable } = reequire('stream');
+const { Readable } = require('stream');
+const onFinished = require('on-finished')
 const destroy = require('destroy')
 const safeStringify = require('safe-json-stringify')
 const { ServiceProvider } = require('@adonisjs/fold')
