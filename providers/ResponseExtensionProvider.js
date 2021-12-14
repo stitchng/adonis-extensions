@@ -53,13 +53,13 @@ const entityBody =  {
 }
 
 class ResponseExtensionProvider extends ServiceProvider {
-/**
- * Register namespaces to the IoC container
- *
- * @method register
- *
- * @return {void}
- */
+  /**
+   * Register namespaces to the IoC container
+   *
+   * @method register
+   *
+   * @return {void}
+   */
   register () {
     this.app.bind('Adonis/Middleware/StreamResponseBody', (app) => {
       let StreamResponseBodyMiddleware = require('../src/Middleware/StreamResponseBody.js')
@@ -70,15 +70,19 @@ class ResponseExtensionProvider extends ServiceProvider {
   }
 
   /**
- * Attach context getter when all providers have
- * been registered
- *
- * @method boot
- *
- * @return {void}
- */
+   * Attach context getter when all providers have
+   * been registered
+   *
+   * @method boot
+   *
+   * @return {void}
+   */
   boot () {
     const Response = this.app.use('Adonis/Src/Response')
+    const StreamMiddleware = this.app.use('Adonis/Middleware/StreamResponseBody')
+    const Server = this.app.use('Server')
+
+    Server.registerNamed({ 'stream': StreamMiddleware.handle.bind(StreamMiddleware) })
 
     Response.macro('validationFailed', function (errorMessages) {
       this.status(422).json({
