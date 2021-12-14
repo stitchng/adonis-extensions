@@ -151,7 +151,6 @@ class ResponseExtensionProvider extends ServiceProvider {
       const Encoding = this.adonisRequest.header('Accept-Encoding', nullishSentinel)
       const rawReadStream = new ReadStream({
         highWaterMark: 32 * 1024,
-        encoding.replace(/^us-/, '')
       })
       const rawDataEmitter = new DataEmitter()
 
