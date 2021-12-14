@@ -11,7 +11,7 @@ class StreamResponseBody {
     const [ , charset ] = request.header('Accept', '').match(/^(?:[^;]+); charset=(.*)\b|$/)
     const charsets = request.header(
       'Accept-Charset',
-      charset
+      charset || null
     )
 
     response.transform(
