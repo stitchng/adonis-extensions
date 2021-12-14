@@ -131,16 +131,12 @@ class ResponseExtensionProvider extends ServiceProvider {
         }
 
         _read () {
-          try {
-            let chunk = null
-            while (-1 !== (chunk = this.nextChunk)) {
-              const pushed = this.push(chunk)
-              if (!pushed) {
-                break;
-              }
+          let chunk = null
+          while (-1 !== (chunk = this.nextChunk)) {
+            const pushed = this.push(chunk)
+            if (!pushed) {
+              break;
             }
-          } catch (err) {
-            this.destroy(err)
           }
         }
       }
