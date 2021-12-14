@@ -24,7 +24,7 @@ class StreamResponseBody {
      {
        chunked: (chunked === 'chunked' || multipart === 'chunked' || this.chunkedResponse),
        multipart: (chunked === 'multipart' || multipart === 'multipart')
-    )
+    })
 
     /* @HINT: send whitespace chars to client so it (client) doesn't attempt to close connection */
     process.nextTick(() => response.sendToStream('                  '))
