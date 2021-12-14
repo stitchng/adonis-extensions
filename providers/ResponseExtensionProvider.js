@@ -159,6 +159,9 @@ class ResponseExtensionProvider extends ServiceProvider {
       if (multipart) {
         this.multiPartBoundary = Number(1 + Math.random() * 234567890).toString(16).replace('.', Date.now())
         this.safeHeader('X-Accel-Buffering', 'no')
+        this.safeHeader('Cache-Control', 'no-cache, max-age=0, private')
+        this.safeHeader('Pragma', 'no-cache')
+        this.safeHeader('Age', '0')
         this.safeHeader('Content-Type', `multipart/x-mixed-replace; boundary="${this.multiPartBoundary}"`)
       }
 
