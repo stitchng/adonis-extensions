@@ -22,7 +22,7 @@ const providers = [
 const globalMiddleware = [
   'Adonis/Middleware/Session',
   ...
-  'Adonis/Middleware/UpdateViewData',
+  'Adonis/Middleware/UpdateViewData'
 ]
 ```
 
