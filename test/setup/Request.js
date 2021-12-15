@@ -17,6 +17,22 @@ class Request extends Macroable {
     })
   }
 
+  language (options = ['en']) {
+    return options[0]
+  }
+
+  cookies () {
+    return {}
+  }
+
+  get () {
+    return {}
+  }
+
+  all () {
+    return {}
+  }
+
   accepts (options) {
     return !options
   }

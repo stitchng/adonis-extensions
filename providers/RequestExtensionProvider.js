@@ -151,15 +151,26 @@ class RequestExtensionProvider extends ServiceProvider {
           currentRoute.domain,
           this.url(),
           this.ip(),
+          String(this.ajax()),
           this.language(['en', 'fr', 'cn', 'dk', 'de', 'jp', 'ma', 'ru', 'ye']),
           Object.keys(cookies).join('|'),
           Object.keys(requestParams).join('|'),
-          // Object.values(requestParams).reduce((str, bit) => str += `${typeof bit === 'object' ? JSON.stringify(bit): bit}|`, ''),
+          Object.values(requestParams).reduce(
+            (str, bit) => {
+              const bitStr = typeof bit === 'object' ? JSON.stringify(bit) : bit
+              if (str !== '') {
+                return str + `|${bitStr}`
+              }
+
+              return str + `${bitStr}`
+            },
+            ''
+          ),
           Object.values(cookies).join('|')
         ]
       ).filter(piece => piece !== '').join('|'))
 
-      const hash = mhash3.hashBytes(key, key.length, 10)
+      const hash = mhash3.hashBytes(key, key.length, 150)
 
       return (Number(Math.abs(hash) % 262144263494052048758001).toString(16))
     })
@@ -189,7 +200,7 @@ class RequestExtensionProvider extends ServiceProvider {
     })
 
     Request.macro('hasHeader', function (headerText) {
-      return (typeof this.header(headerText) === 'string')
+      return (typeof this.header(headerText, null) === 'string')
     })
   }
 }
