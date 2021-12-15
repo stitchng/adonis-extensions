@@ -19,7 +19,7 @@ class StreamResponseBody {
         response.request,
         charsets !== null
           ? charsets.toLowerCase().replace(/(?:; ?q=\d\.\d{1,}(\,\*?)?)+\b|$/g, '').replace(',', ', ').split(', ')
-          : ['utf-8', 'utf-7', 'iso-8859-1', 'us-ascii']
+          : ['utf-8', 'iso-8859-1', 'us-ascii', 'iso-10646-ucs-2', 'utf-7']
       ),
      {
        chunked: (chunked === 'chunked' || multipart === 'chunked' || this.chunkedResponse),
