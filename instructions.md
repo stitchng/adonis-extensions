@@ -161,8 +161,12 @@ module.exports = {
 const Route = use('Route')
 
 Route.get('/timestamp', function ({ response }) {
-  response.sendToStream({ time: Date.now() })
-}).middleware(['auth', 'stream:chunked']).as('app.timestamping')
+  response.sendToStream({ time: Date.now() }, 'application/json; charset=utf-8')
+}).middleware(['auth', 'stream: chunked, mutipart']).as('app.timestamping')
+
+Route.post('/random', function ({ response }) {
+  response.sendToStream(Math.random() * 12345)
+}).middleware('auth', 'stream: chunked']).as('app.random')
 ```
 
 ## Docs
