@@ -175,7 +175,7 @@ Route.get('/timestamp', function ({ response }) {
 
 Route.post('/random', function ({ response }) {
   response.sendToStream(Math.random() * 12345)
-}).middleware(['stream: chunked']).as('app.randoming')
+}).middleware(['stream: chunked', 'auth']).as('app.randoming')
 ```
 
 ## Docs
