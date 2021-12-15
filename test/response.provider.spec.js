@@ -29,6 +29,8 @@ test.group('AdonisJS [Response] Extensions Provider Test(s)', (group) => {
     let Response = ioc.use('Adonis/Src/Response')
     let response = new Response()
 
+    assert.isFunction(response.transform)
+    assert.isFunction(response.sendToStream)
     assert.isFunction(response.isEmpty)
     assert.isFunction(response.setHeaders)
     assert.isFunction(response.validationFailed)
