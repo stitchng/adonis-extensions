@@ -25,6 +25,7 @@ class HttpResponse extends Writable {
 class HttpRequest extends Readable {
   constructor (options) {
     super(options)
+    this.check = false
   }
 }
 
@@ -39,6 +40,7 @@ class Response extends Macroable {
     this.response = httpResponse
     this.request = new HttpRequest({})
     this.headers = {}
+    this.implicitEnd = true
     this.headersSent = false
 
     this._lazyBody = {
@@ -46,6 +48,10 @@ class Response extends Macroable {
       content: null,
       args: []
     }
+  }
+
+  get isPending () {
+    return this.headersSent || this.response.finished
   }
 
   header (name, defaultValue = '') {
@@ -65,7 +71,7 @@ class Response extends Macroable {
   }
 
   vary (name) {
-    return name;
+    return name
   }
 
   status (code) {
@@ -85,8 +91,12 @@ class Response extends Macroable {
     return true
   }
 
-  safeHeader (headers) {
-    return true
+  _invoke (method, body, [generateEtag]) {
+    if (!this.implicitEnd) {
+      return true
+    }
+
+    this._lazyBody = { method, body, args: [generateEtag] }
   }
 }
 

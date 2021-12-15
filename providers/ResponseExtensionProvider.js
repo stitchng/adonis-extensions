@@ -59,7 +59,7 @@ class ResponseExtensionProvider extends ServiceProvider {
    * Setup 'Content-Type: multipart/x-mixed-replace'
    * response headers and HTTP compression transforms
    * for response.
-   * 
+   *
    *
    * @param {Object} ctx
    * @param {Function} next
@@ -84,9 +84,9 @@ class ResponseExtensionProvider extends ServiceProvider {
         response.request,
         charsets !== null
           ? charsets
-              .toLowerCase()
-                .replace(/(?:; ?q=\d\.\d{1,}(,\*?)?)+\b|$/g, '')
-                  .replace(',', ', ').split(', ')
+            .toLowerCase()
+            .replace(/(?:; ?q=\d\.\d{1,}(,\*?)?)+\b|$/g, '')
+            .replace(',', ', ').split(', ')
           : ['utf-8', 'iso-8859-1', 'us-ascii', 'iso-10646-ucs-2', 'utf-7']
       ),
       {
@@ -97,7 +97,7 @@ class ResponseExtensionProvider extends ServiceProvider {
     /* @HINT: send whitespace chars to client so it (client) doesn't attempt to close connection */
     process.nextTick(() => response.sendToStream('           '))
 
-    return await next()
+    return next()
   }
 
   /**

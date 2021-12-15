@@ -21,6 +21,7 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
   group.before(() => {
     ioc.singleton('Adonis/Src/Config', () => {
       let config = new Config()
+      config.set('app.http.etag', false)
       config.set('app.http.compression.algo', 'gzip')
       config.set('app.http.compression.enabled', true)
       config.set('extension.chunkedResponse', false)
@@ -76,7 +77,7 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
     })
   })
 
-  test('setup middleware to work as expected', async (assert) => {
+  test('all middlewares should work as expected', async (assert) => {
     const context = ioc.use('Adonis/Src/HttpContext')
 
     let responseExtensionProvider = new ResponseExtensionProvider(ioc)
@@ -93,12 +94,16 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
     let Config = ioc.use('Adonis/Src/Config')
     let View = ioc.use('Adonis/Src/View')
 
-    context.request = new Request({ 'Connection': 'close', 'Accept': 'text/html' })
+    context.request = new Request({
+      'Connection': 'close',
+      'Accept': 'text/html',
+      'Cache-Control': 'no-cache, proxy-revalidate'
+    })
     context.view = new View({})
 
-    const viewmiddleware = new UpdateDataMiddleware(ioc.use('Adonis/Src/Config'))
-  
-    viewmiddleware
+    const middleware = new UpdateDataMiddleware(Config)
+
+    middleware
       .handle(context, async function () {
         return true
       })
@@ -107,18 +112,46 @@ test.group('AdonisJS Extensions [Middleware] Test(s)', (group) => {
         assert.equal(context.view.engine.resolve('full_year'), 2019)
         assert.equal(context.view.engine.resolve('origin'), 'http://127.0.0.1:8080')
       })
-    
-      ioc.singleton('Adonis/Src/Response', () => {
-        let Response = require('./setup/Response.js')
-        return Response
-      })
 
-      context.request = new Request({ 'Connection': 'keep-alive', 'Accept': 'application/json' })
-      context.response = new Response(Config, 200, '{"time": 168940085638 }')
-      context.response.adonisRequest = context.request
+    requestExtensionProvider.cacheHeadersMiddleware(context, async function () {
+      return true
+    }).then(() => {
+      assert.equal(
+        context.response.header('Cache-Control', ''),
+        'no-cache, proxy-revalidate'
+      )
+    })
 
-      responseExtensionProvider.streamResponseBodyMiddleware(context, async function () {
-        return true
-      })
+    context.request = new Request({ 'Date': (new Date()).toISOString(), 'Accept': 'application/json' })
+    context.response = new Response(Config, 200, '{"time": 168940085638 }')
+    context.response.adonisRequest = context.request
+    context.response.adonisRequest.request = context.response.request
+    context.response.adonisRequest.response = context.response.response
+
+    responseExtensionProvider.streamResponseBodyMiddleware(context, async function () {
+      return true
+    }, ['multipart']).then(() => {
+      assert.isTrue(
+        context.response.header('Content-Type', '')
+          .includes('multipart/x-mixed-replace; boundary="')
+      )
+      assert.equal(
+        context.response.header('Content-Encoding', ''),
+        'gzip'
+      )
+    })
+
+    responseExtensionProvider.streamResponseBodyMiddleware(context, async function () {
+      return true
+    }, ['chunked']).then(() => {
+      assert.isFalse(
+        context.response.header('Content-Type', '')
+          .includes('multipart/x-mixed-replace; boundary="')
+      )
+      assert.equal(
+        context.response.header('Transfer-Encoding', ''),
+        'gzip, chunked'
+      )
+    })
   })
 })
