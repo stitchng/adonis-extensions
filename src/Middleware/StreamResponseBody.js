@@ -18,7 +18,7 @@ class StreamResponseBody {
       nodeReq.charset(
         response.request,
         charsets !== null
-          ? charsets.split(', ')
+          ? charsets.toLowerCase().replace(/(?:; ?q=\d\.\d{1,}(\,\*?)?)+\b|$/g, '').replace(',', ', ').split(', ')
           : ['utf-8', 'utf-7', 'iso-8859-1', 'us-ascii']
       ),
      {
