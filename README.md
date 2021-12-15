@@ -126,7 +126,7 @@ class RouteNameAndRequestChecker {
 
             // send data to the NodeJS stream (read-stream)
             // first argument is the data you wish to send to the HTTP client
-            // second argument is the conten-type of the mutipart section for "Content-Type: multipart/x-mixed-replace"
+            // second argument is the content-type of the multipart section for "Content-Type: multipart/x-mixed-replace"
             response.sendToStream({ time: Date.now() }, 'application/json; charset=utf-8')
           }
           return;
