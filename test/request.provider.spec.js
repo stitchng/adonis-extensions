@@ -58,6 +58,7 @@ test.group('AdonisJS [Request] Extensions Provider Test(s)', (group) => {
 
     assert.isFunction(request.currentRoute)
     assert.isFunction(request.port)
+    assert.isFunction(request.origin)
     assert.isFunction(request.hasJsonBody)
     assert.isFunction(request.expectsJsonBody)
     assert.isFunction(request.hasHeader)
@@ -65,7 +66,5 @@ test.group('AdonisJS [Request] Extensions Provider Test(s)', (group) => {
     assert.isFunction(request.fingerprint)
     assert.isFunction(request.isMethodCacheable)
     assert.isFunction(request.referer)
-
-    // assert.exists(request.fingerprint())
   })
 })
