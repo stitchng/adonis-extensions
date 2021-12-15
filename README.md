@@ -1,5 +1,5 @@
 # adonis-extensions
-An addon/plugin package to provide core extensions for AdonisJS 4.0+
+An addon/plugin package to provide core extensions for AdonisJS 4.x+
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
@@ -8,6 +8,8 @@ An addon/plugin package to provide core extensions for AdonisJS 4.0+
 <img src="http://res.cloudinary.com/adonisjs/image/upload/q_100/v1497112678/adonis-purple_pzkmzt.svg" width="200px" align="right" hspace="30px" vspace="140px">
 
 ## Getting Started
+
+>Please ensure you read the **instructions.md** file to get the best information about how to setup this package for optimal use
 
 ```bash
 
@@ -77,7 +79,7 @@ const Route = use('Route')
 
 'use strict'
 
-class RouteThreadsManager {
+class RouteNameAndRequestChecker {
 
     async handle({ request, response }, next){
 	    let isAjax = request.ajax()
@@ -89,30 +91,41 @@ class RouteThreadsManager {
       if (!origin.contains('.oaksearch.com.ng')
           && request.currentRoute().isNamed('analytics.*')) { // 'analytics.stats' route will pass here
  
+        // set multiple headers safely in one go.
         response.setHeaders({
           'X-App-Recall-Count': '1',
           'X-Request-Fingerprint': fingerprint
         })
-      }
 
-      const delay = function callback (time) {
-        return new Promise((resolve) => {
-          return setTimeout(resolve, time)
-        })
-      }
+        const delay = function callback (time) {
+          return new Promise((resolve) => {
+            return setTimeout(resolve, time)
+          })
+        }
 
-      // Transform the response so that it is streamed (NodeJS streams)
-      /** @HINT: 
-              setup HTTP (NodeJS streamed) response as chunked and multipart/x-mixed-replace using utf-8 encoding 
-      */
-      response.transform('utf8', { chunked: true, multipart: true })
+        // Transform the response so that it is streamed (NodeJS streams)
+        /** @HINT: 
+                
+          setup HTTP (NodeJS streamed) response as chunked and multipart/x-mixed-replace using utf-8 encoding 
+        */
+        response.transform('utf8', { chunked: true, multipart: true })
 
-      if (!isAjax) {
-        for (let count = 0; count < 5; count++) {
-          // delay with a promise using `setTimeout()`
-          await delay(count * 1000)
-          // send data to the NodeJS stream
-          response.sendToStream(Date.now())
+        if (isAjax) {
+          for (let count = 0; count < 5; count++) {
+            if (count === 5) {
+              // EOF sentinel to signal to the NodeJS stream
+              // to close and trigger and end to the response
+              // write-stream
+              response.sendToStream(null)
+              break;
+            }
+
+            // delay with a promise using `setTimeout()`
+            await delay(count * 1000)
+
+            // send data to the NodeJS stream (read-stream)
+            response.sendToStream(Date.now())
+          }
         }
       }
 
@@ -120,7 +133,7 @@ class RouteThreadsManager {
     }
 }
 
-module.exports = RouteThreadsManager
+module.exports = RouteNameAndRequestChecker
 ```
 
 ## License
