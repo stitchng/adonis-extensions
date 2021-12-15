@@ -12,7 +12,7 @@ const providers = [
   'adonisjs-extensions/providers/ResponseExtensionProvider',
   'adonisjs-extensions/providers/ViewExtensionProvider', // optional
   'adonisjs-extensions/providers/RouteExtensionProvider',
-  'adonisjs-extensions/providers/ValidationExtensionProvider'
+  'adonisjs-extensions/providers/ValidationExtensionProvider' // optional
 ]
 ```
 
@@ -140,12 +140,17 @@ module.exports = {
     |
     | Set compression on all HTTP responses and package them into NodeJS Streams.
     |
-    | response.transform('ascii', { chunked: false, multipart: false }).sendToStream(Date.now())
+    | br (brotli) and gzip are the only compression algos supported by this
+    | package
+    |
+    | response
+    |   .transform('ascii', { chunked: false, multipart: false })
+    |     .sendToStream(Date.now())
     |
     */
     compression: {
       enabled: false,
-      algo: Env.get('APP_HTTP_COMPRESSION_ALGO', 'gzip')
+      algo: Env.get('APP_HTTP_COMPRESSION_ALGO', 'gzip') // OR br
     }
   },
   ...
