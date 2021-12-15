@@ -140,7 +140,7 @@ module.exports = {
     |
     | Set compression on all HTTP responses and package them into NodeJS Streams.
     |
-    | response.transform('ascii').sendToStream(Date.now())
+    | response.transform('ascii', { chunked: false, multipart: false }).sendToStream(Date.now())
     |
     */
     compression: {
