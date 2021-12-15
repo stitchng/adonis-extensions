@@ -28,7 +28,7 @@ const globalMiddleware = [
 
 ## Config
 
-The configuration is saved inside `config/extension.js` file. Tweak it accordingly.
+The configuration for this package is saved inside `config/extension.js` file. Tweak it according to your preference. Also, you will need to update the `config/app.js` file to include a section for HTTP compression configuration. This section should go under the `http` sub key and be title `compression` as depicted below:
 
 >NOTE: To set HTTP (dynamic) compression for your AdonisJS server using this library, simply setup your `config/app.js` like so:
 
