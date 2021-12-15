@@ -89,7 +89,7 @@ class RouteNameAndRequestChecker {
       let fingerprint = request.fingerprint()
 
       if (!origin.contains('.oaksearch.com.ng')
-          && request.currentRoute().isNamed('analytics.*')) { // 'analytics.stats' route will pass here
+            && request.currentRoute().isNamed('analytics.*')) { // 'analytics.stats' route will pass here
  
         // set multiple headers safely in one go.
         response.setHeaders({
@@ -106,7 +106,8 @@ class RouteNameAndRequestChecker {
         // Transform the response so that it is streamed (NodeJS streams)
         /** @HINT: 
                 
-          setup HTTP (NodeJS streamed) response as chunked and multipart/x-mixed-replace using utf-8 encoding 
+          setup HTTP (NodeJS streamed) response as chunked and HTTP "Content-Type: multipart/x-mixed-replace" 
+          using utf-8 encoding 
         */
         response.transform('utf8', { chunked: true, multipart: true })
 
@@ -124,8 +125,11 @@ class RouteNameAndRequestChecker {
             await delay(count * 1000)
 
             // send data to the NodeJS stream (read-stream)
-            response.sendToStream(Date.now())
+            // first argument is the data you wish to send to the HTTP client
+            // second argument is the conten-type of the mutipart section for "Content-Type: multipart/x-mixed-replace"
+            response.sendToStream({ time: Date.now() }, 'application/json; charset=utf-8')
           }
+          return;
         }
       }
 
