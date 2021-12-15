@@ -45,8 +45,8 @@ class Request extends Macroable {
     return '/user/new/:id'
   }
 
-  header (name) {
-    return (this.request.headers[name] || null)
+  header (name, defaultValue = '') {
+    return (this.request.headers[name] || defaultValue || null)
   }
 }
 

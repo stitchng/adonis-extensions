@@ -5,18 +5,18 @@ const url = require('url')
 const mhash3 = require('../src/libs/murmur-hash.3.js')
 
 class RequestExtensionProvider extends ServiceProvider {
-/**
- * Setup 'Cache-Control' response headers
- * taking into consideration the request
- *
- * @param {Object} ctx
- * @param {Function} next
- * @param {Array} [-destructured-]
- *
- * @method cacheHeadersMiddleware
- *
- * @return {Promise}
- */
+  /**
+   * Setup 'Cache-Control' response headers
+   * taking into consideration the request
+   *
+   * @param {Object} ctx
+   * @param {Function} next
+   * @param {Array} [-destructured-]
+   *
+   * @method cacheHeadersMiddleware
+   *
+   * @return {undefined}
+   */
   async cacheHeadersMiddleware (ctx, next, directives = ['no-store', 'max-age=0']) {
     ctx.response.implicitEnd = false
 
@@ -140,7 +140,7 @@ class RequestExtensionProvider extends ServiceProvider {
       if (!(cookies instanceof Object)) {
         cookies = {}
       }
- 
+
       if (currentRoute.route === null) {
         return null
       }

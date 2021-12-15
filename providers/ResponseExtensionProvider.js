@@ -1,59 +1,105 @@
 'use strict'
 
-const zlib = require('zlib');
-const EventEmitter = require('events');
-const { Readable } = require('stream');
+const zlib = require('zlib')
+const EventEmitter = require('events')
+const { Readable } = require('stream')
+const nodeReq = require('node-req')
 const onFinished = require('on-finished')
 const destroy = require('destroy')
 const safeStringify = require('safe-json-stringify')
 const { ServiceProvider } = require('@adonisjs/fold')
 
-const entityBody =  {
+const entityBody = {
   stream: function streamer (res, body) {
     return new Promise((resolve, reject) => {
-    if (typeof (body.pipe) !== 'function') {
-      reject(new Error('[adonisjs-extensions]: cannot find a valid read-stream'))
-      return
-    }
-
-    let finished = false
-
-    /**
-     * Error in stream
-     */
-    body.on('error', (error) => {
-      if (finished) {
+      if (typeof (body.pipe) !== 'function') {
+        reject(new Error('[adonisjs-extensions]: cannot find a valid read-stream'))
         return
       }
 
-      finished = true
-      destroy(body)
+      let finished = false
 
-      reject(error)
-    })
+      /**
+     * Error in stream
+     */
+      body.on('error', (error) => {
+        if (finished) {
+          return
+        }
 
-    /**
+        finished = true
+        destroy(body)
+
+        reject(error)
+      })
+
+      /**
      * Consumed stream
      */
-    body.on('end', resolve)
+      body.on('end', resolve)
 
-    /**
+      /**
      * Written response
      */
-    onFinished(res, function () {
-      finished = true
-      destroy(body)
-    })
+      onFinished(res, function () {
+        finished = true
+        destroy(body)
+      })
 
-    /**
+      /**
      * Pipe to res
      */
-    body.pipe(res)
-  })
+      body.pipe(res)
+    })
   }
 }
 
 class ResponseExtensionProvider extends ServiceProvider {
+  /**
+   * Setup 'Content-Type: multipart/x-mixed-replace'
+   * response headers and HTTP compression transforms
+   * for response.
+   * 
+   *
+   * @param {Object} ctx
+   * @param {Function} next
+   * @param {Array} [-destructured-]
+   *
+   * @method streamResponseBodyMiddleware
+   *
+   * @return {undefined}
+   */
+  async streamResponseBodyMiddleware ({ request, response }, next, [ chunked, multipart ]) {
+    const chunkedResponse = response.Config.get('extension.chunkedResponse')
+    const [ , charset ] = request.header(
+      'Accept',
+      '').match(/^(?:[^;]+); charset=(.*)\b|$/) || ['', false]
+    const charsets = request.header(
+      'Accept-Charset',
+      charset || null
+    )
+
+    response.transform(
+      nodeReq.charset(
+        response.request,
+        charsets !== null
+          ? charsets
+              .toLowerCase()
+                .replace(/(?:; ?q=\d\.\d{1,}(,\*?)?)+\b|$/g, '')
+                  .replace(',', ', ').split(', ')
+          : ['utf-8', 'iso-8859-1', 'us-ascii', 'iso-10646-ucs-2', 'utf-7']
+      ),
+      {
+        chunked: (chunked === 'chunked' || multipart === 'chunked' || chunkedResponse),
+        multipart: (chunked === 'multipart' || multipart === 'multipart')
+      })
+
+    /* @HINT: send whitespace chars to client so it (client) doesn't attempt to close connection */
+    process.nextTick(() => response.sendToStream('           '))
+
+    return await next()
+  }
+
   /**
    * Register namespaces to the IoC container
    *
@@ -62,12 +108,7 @@ class ResponseExtensionProvider extends ServiceProvider {
    * @return {void}
    */
   register () {
-    this.app.bind('Adonis/Middleware/StreamResponseBody', (app) => {
-      let StreamResponseBodyMiddleware = require('../src/Middleware/StreamResponseBody.js')
-      let Config = app.use('Adonis/Src/Config')
-
-      return new StreamResponseBodyMiddleware(Config)
-    })
+    ;//
   }
 
   /**
@@ -80,10 +121,9 @@ class ResponseExtensionProvider extends ServiceProvider {
    */
   boot () {
     const Response = this.app.use('Adonis/Src/Response')
-    const StreamMiddleware = this.app.use('Adonis/Middleware/StreamResponseBody')
     const Server = this.app.use('Server')
 
-    Server.registerNamed({ 'stream': StreamMiddleware.handle.bind(StreamMiddleware) })
+    Server.registerNamed({ 'stream': this.streamResponseBodyMiddleware })
 
     Response.macro('validationFailed', function (errorMessages) {
       this.status(422).json({
@@ -132,10 +172,10 @@ class ResponseExtensionProvider extends ServiceProvider {
 
         _read () {
           let chunk = null
-          while (-1 !== (chunk = this.nextChunk)) {
+          while ((chunk = this.nextChunk) !== -1) {
             const pushed = this.push(chunk)
             if (!pushed) {
-              break;
+              break
             }
           }
         }
@@ -146,7 +186,7 @@ class ResponseExtensionProvider extends ServiceProvider {
       const TransferEncoding = this.adonisRequest.header('TE', emptySentinel)
       const Encoding = this.adonisRequest.header('Accept-Encoding', nullishSentinel)
       const rawReadStream = new ReadStream({
-        highWaterMark: 32 * 1024,
+        highWaterMark: 32 * 1024
       })
       const rawDataEmitter = new DataEmitter()
 
@@ -172,7 +212,7 @@ class ResponseExtensionProvider extends ServiceProvider {
         if (compressionIsEnabled) {
           const useGzipAlgo = compressionAlgo === 'gzip'
           const chunkSize = 32 * 1024
-          const level = zlib.constants[useGzipAlgo ? 'Z_BEST_SPEED' : 'Z_BEST_COMPRESSION'] 
+          const level = zlib.constants[useGzipAlgo ? 'Z_BEST_SPEED' : 'Z_BEST_COMPRESSION']
           const finishFlush = zlib.constants[useGzipAlgo ? 'Z_SYNC_FLUSH' : 'BROTLI_OPERATION_FLUSH']
           const info = false
           const options = { chunkSize, level, finishFlush, info }
@@ -187,7 +227,8 @@ class ResponseExtensionProvider extends ServiceProvider {
 
       this.__emitter.on('adonisjs_stream_data', ({ body, notJson, contentType }) => {
         let data = null
-        if (!(body instanceof Buffer) {
+
+        if (!(body instanceof Buffer)) {
           if (typeof body === 'object' && notJson) {
             data = String(body)
           }
@@ -205,9 +246,9 @@ class ResponseExtensionProvider extends ServiceProvider {
           if (multipart) {
             const isFirstMultipartBlock = this.__stream._backPressureQueue.length === 0
             this.__stream.nextChunk = Buffer.concat([
-              Buffer.from(`${ isFirstMultipartBlock ? '\r\n' : ''}--${this.multiPartBoundary}\r\n`, 'ascii'),
+              Buffer.from(`${isFirstMultipartBlock ? '\r\n' : ''}--${this.multiPartBoundary}\r\n`, 'ascii'),
               Buffer.from(`Content-Type: ${contentType}\r\n`, 'ascii'),
-              Buffer.from(`Content-Length: ${payload.length}\r\n\r\n`, 'ascii'),
+              Buffer.from(`Content-Length: ${payload.length}\r\n\r\n`, 'ascii')
             ])
           } else {
             this.__stream.nextChunk = Buffer.from(`${payload.length}\r\n`, 'ascii')
@@ -237,7 +278,7 @@ class ResponseExtensionProvider extends ServiceProvider {
           this.safeHeader(
             'Transfer-Encoding',
             `${compressionAlgo}${chunked ? ', chunked' : ''}`
-          ) 
+          )
         } else if (chunked) {
           this.safeHeader(
             'Transfer-Encoding',
@@ -247,7 +288,6 @@ class ResponseExtensionProvider extends ServiceProvider {
       }
 
       this.response.on('end', () => {
-
         this._lazyBody.content = null
         this._lazyBody.args = []
 
@@ -274,8 +314,8 @@ class ResponseExtensionProvider extends ServiceProvider {
 
       const ContentType = this.adonisRequest.header('Accept', '*/*')
       const isNotJSONRequest = !(
-        ContentType.includes('application/json')
-          || ContentType.includes('application/graphql')
+        ContentType.includes('application/json') ||
+          ContentType.includes('application/graphql')
       )
 
       if (!this._canStream) {
@@ -303,7 +343,7 @@ class ResponseExtensionProvider extends ServiceProvider {
 
       return this._canStream
     })
- 
+
     Response.macro('setHeaders', function (headers = {}) {
       if (!(headers instanceof Object) || this.response.headersSent) {
         return false

@@ -2,6 +2,19 @@
 
 const { ServiceProvider } = require('@adonisjs/fold')
 
+const fromPairs = (pairs = []) => {
+  let index = -1
+  const length = pairs == null ? 0 : pairs.length
+  let result = {}
+
+  while (++index < length) {
+    const pair = pairs[index]
+    result[pair[0]] = pair[1]
+  }
+
+  return result
+}
+
 class ValidationExtensionProvider extends ServiceProvider {
 /**
  * Register namespaces to the IoC container
@@ -171,7 +184,7 @@ class ValidationExtensionProvider extends ServiceProvider {
          * should take care of it.
          */
         if (!value) {
-          return;
+
         }
       }
     }
