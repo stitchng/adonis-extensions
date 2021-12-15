@@ -1,3 +1,10 @@
+<a name="0.0.11"></a>
+# 0.0.11 (2021-12-15)
+
+### Features Added
+- Added `response.transform()`
+- Added `response.sendToStream()`
+
 <a name="0.0.10"></a>
 # 0.0.10 (2020-12-01)
 
