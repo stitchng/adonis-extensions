@@ -192,10 +192,13 @@ class ResponseExtensionProvider extends ServiceProvider {
             data = String(body)
           }
 
-          if (!notJson) {
+          const isJson = !notJson
+
+          if (isJson) {
             data = safeStringify(body)
           }
         }
+
         const payload = data instanceof Buffer ? data : Buffer.from(data, encoding.replace(/^us-/, ''))
 
         if (chunked) {
