@@ -102,7 +102,10 @@ class RouteThreadsManager {
       }
 
       // Transform the response so that it is streamed (NodeJS streams)
-      response.transform()
+      /** @HINT: 
+              setup HTTP (NodeJS streamed) response as chunked and multipart/x-mixed-replace using utf-8 encoding 
+      */
+      response.transform('utf8', { chunked: true, multipart: true })
 
       if (!isAjax) {
         for (let count = 0; count < 5; count++) {
