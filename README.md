@@ -112,7 +112,7 @@ class RouteNameAndRequestChecker {
 
         if (isAjax) {
           for (let count = 0; count < 5; count++) {
-            if (count === 5) {
+            if (count === 4) {
               // EOF sentinel to signal to the NodeJS stream
               // to close and trigger and end to the response
               // write-stream
