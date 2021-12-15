@@ -153,6 +153,10 @@ module.exports = {
 ```
 ## Using NodeJS Streams (HTTP Streaming / Compression)
 
+As it concerns **AdonisJS** 4, [NodeJS Streams](https://nodesource.com/blog/understanding-streams-in-nodejs/) are only used when files (usually on disk) are to be sent to the (HTTP) client (e.g. web, mobile) via either the `response.download()` or `response.attachment()` methods (on the AdonisJS response objects).  This has made it such that dynamically-created data (e.g. from a database as JSON) that is large enough can't utilize [NodeJS Streams](https://nodesource.com/blog/understanding-streams-in-nodejs/). Now, with **adonisjs-extensions**, you can wield the power of [NodeJS Streams](https://nodesource.com/blog/understanding-streams-in-nodejs/) while sending dynamically-created data to the (HTTP) client without any hindrance.
+
+Below is how to get started using NodeJS streams:
+
 >You have to include the `stream` named middleware (and optionally set AdonisJS middleware arguments: `stream: chunked, multipart`) to utilise **NodeJS Streams** on the route you wish to enable HTTP streaming and/or HTTP compression. The `chunkedResponse` config in _config/extensions.js_ is used only for app-level configurations while the middleware argument is used for route-level configurations.
 
 ```js
