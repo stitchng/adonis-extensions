@@ -8,7 +8,7 @@ class StreamResponseBody {
   }
 
   async handle ({ request, response }, next, [ chunked, multipart ]) {
-    const [ , charset ] = request.header('Accept', '').match(/^(?:[^;]+); charset=(.*)\b|$/)
+    const [ , charset ] = request.header('Accept', '').match(/^(?:[^;]+); charset=(.*)\b|$/) || ['', false]
     const charsets = request.header(
       'Accept-Charset',
       charset || null
