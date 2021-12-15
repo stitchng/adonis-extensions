@@ -18,7 +18,7 @@ class RequestExtensionProvider extends ServiceProvider {
  * @return {Promise}
  */
   async cacheHeadersMiddleware (ctx, next, directives = ['no-store', 'max-age=0']) {
-    ctx.response.implicitEnd = true
+    ctx.response.implicitEnd = false
 
     await next()
 
@@ -36,7 +36,7 @@ class RequestExtensionProvider extends ServiceProvider {
       }
     }
 
-    return ctx.response.end()
+    ctx.response.implicitEnd = true
   }
 
   setDirectives (ctx, directives) {
@@ -118,32 +118,54 @@ class RequestExtensionProvider extends ServiceProvider {
       return current
     })
 
-    Request.macro('fingerprint', function (unique = true) {
-      // If requests exceed 1 billion, collion make occur (rate:2%)
-      let currentRoute = this.currentRoute()
+    Request.macro('isMethodCacheable', function () {
+      let method = this.method().toLowerCase()
 
+      return (method === 'get' || method === 'head')
+    })
+
+    Request.macro('fingerprint', function (unique = true) {
+      // If requests exceed 1 billion, collision may occur (at a rate: 2%)
+
+      const currentRoute = this.currentRoute()
+      const method = this.method()
+
+      let cookies = this.cookies()
+      let requestParams = this.isMethodCacheable() ? this.get() : this.all()
+
+      if (!(requestParams instanceof Object)) {
+        requestParams = {}
+      }
+
+      if (!(cookies instanceof Object)) {
+        cookies = {}
+      }
+ 
       if (currentRoute.route === null) {
         return null
       }
 
       const key = ([].concat(
-        (unique === true ? [this.method()] : currentRoute.verbs),
-        [currentRoute.domain, this.url(), this.ip()]
-      ).join('|'))
+        (unique === true ? [method] : currentRoute.verbs),
+        [
+          currentRoute.domain,
+          this.url(),
+          this.ip(),
+          this.language(['en', 'fr', 'cn', 'dk', 'de', 'jp', 'ma', 'ru', 'ye']),
+          Object.keys(cookies).join('|'),
+          Object.keys(requestParams).join('|'),
+          // Object.values(requestParams).reduce((str, bit) => str += `${typeof bit === 'object' ? JSON.stringify(bit): bit}|`, ''),
+          Object.values(cookies).join('|')
+        ]
+      ).filter(piece => piece !== '').join('|'))
 
       const hash = mhash3.hashBytes(key, key.length, 10)
 
-      return (Number(Math.abs(hash) % 262144263494052048758).toString(16))
+      return (Number(Math.abs(hash) % 262144263494052048758001).toString(16))
     })
 
     Request.macro('referer', function () {
       return this.header('Referer')
-    })
-
-    Request.macro('isMethodCacheable', function () {
-      let method = this.method().toLowerCase()
-
-      return (method === 'get' || method === 'head')
     })
 
     Request.macro('port', function () {
